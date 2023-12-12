@@ -3,7 +3,7 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "build": "npx @11ty/eleventy --input=./src --output=_site"
+    "build": "npx @11ty/eleventy --input=./src --output=docs/"
   },
   "devDependencies": {
     "bun-types": "latest"
