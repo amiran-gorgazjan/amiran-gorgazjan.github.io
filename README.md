@@ -1,1 +1,0 @@
-# amiran-gorgazjan.github.io
