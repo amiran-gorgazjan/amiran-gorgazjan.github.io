@@ -40,3 +40,26 @@ a {
     margin: 0 auto;
     padding: 2rem;
 }
+
+p.the {
+    color: transparent
+}
+
+p.the > i:nth-child(1) {
+    background: url(../images/the/T.svg) no-repeat;
+    font-size: 15rem;
+    position: relative;
+    top: 9rem;
+    left: 1rem;
+}
+
+p.the > i:nth-child(2) {
+    background: url(../images/the/h.svg) no-repeat;
+    font-size: 5rem;
+}
+
+p.the > i:nth-child(3) {
+    background: url(../images/the/e.svg) no-repeat;
+    font-size: 5rem;
+}
+
