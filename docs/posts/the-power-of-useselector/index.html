@@ -1,0 +1,139 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amiran Gorgazjan | The Power of `useSelector`: Optimizing Rendering Performance in React/Redux</title>
+    <link rel="stylesheet" href="/styles/global.css">
+    <link rel="stylesheet" href="/styles/sidebar.css">
+    <link rel="stylesheet" href="/styles/md-content.css">
+</head>
+
+<body>
+    <div class="site-container">
+        <div class="site-container__sidebar">
+            
+
+<div class="sidebar">
+    <div class="sidebar__explorer">Explorer</div>
+
+    <ul>
+        <li>
+    <a
+        href="/"
+        class=" ">
+        index.html
+    </a>
+</li>
+        <li>
+            
+    <a
+        href="/pages/projects"
+        class="folder ">
+        pages/
+    </a>
+
+            <ul>
+                <li>
+    <a
+        href="/pages/projects"
+        class="html ">
+        projects.html
+    </a>
+</li>
+                <li>
+    <a
+        href="/pages/cv"
+        class="html ">
+        cv.html
+    </a>
+</li>
+            </ul>
+        </li>
+        <li>
+            
+    <a
+        href="/posts/uvicorn-vs-gunicorn"
+        class="folder ">
+        posts/
+    </a>
+
+            <ul>
+                <li>
+    <a
+        href="/posts/uvicorn-vs-gunicorn"
+        class="html ">
+        uvicorn vs gunicorn.html
+    </a>
+</li>
+                <li>
+    <a
+        href="/posts/signal-based-entity-system"
+        class="html ">
+        signal based entity system.html
+    </a>
+</li>
+                <li>
+    <a
+        href="/posts/the-power-of-useselector"
+        class="html active">
+        the power of useSelector.html
+    </a>
+</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+        </div>
+
+        <div class="site-container__content-scroll">
+            <div class="site-container__content">
+                <div class="md-content">
+                    <h1>The Power of <code>useSelector</code>: Optimizing Rendering Performance in React/Redux</h1>
+<p>In the realm of React development, particularly when integrating with Redux for state management, performance optimization is a key concern. A critical yet often overlooked aspect of this optimization is the selective selection of data from the Redux store. Let's explore why this is vital for rendering performance and how the <code>useSelector</code> hook in React can be a game-changer.</p>
+<h2>The Role of the Store in React/Redux</h2>
+<p>In React/Redux applications, the 'store' is the heart of state management, serving as a centralized hub for the application's state. This centralized management system is essential for consistent data flow and interaction among various components. However, how you interact with this store significantly impacts your application's performance.</p>
+<h2>The Pitfall of Over-Fetching</h2>
+<p>A frequent mistake in Redux is over-fetching data from the store, leading to several performance issues:</p>
+<ol>
+<li><strong>Increased Memory Usage:</strong> Excess data retrieval can bloat the application’s memory use.</li>
+<li><strong>Unnecessary Rerenders:</strong> React components re-render when their props or state change. If a component is subscribed to more store data than it needs, it may rerender unnecessarily when unrelated parts of the store are updated.</li>
+<li><strong>Slower Component Loading:</strong> Components that retrieve large amounts of data can experience delays in mounting, affecting page load times.</li>
+</ol>
+<h2>Embracing <code>useSelector</code> for Performance</h2>
+<p>The <code>useSelector</code> hook in React/Redux offers a solution to these problems. It allows you to extract precisely the data you need from the store, leading to performance improvements:</p>
+<ol>
+<li><strong>Reduced Memory Usage:</strong> Fetching only necessary data reduces the application’s memory footprint.</li>
+<li><strong>Minimized Rerenders:</strong> Components will only rerender in response to changes in the data they use, not due to unrelated store updates.</li>
+<li><strong>Enhanced Mounting Speed:</strong> Components fetching less data can mount more quickly, enhancing responsiveness.</li>
+</ol>
+<h2>Implementing <code>useSelector</code>: Best Practices</h2>
+<p>To maximize the benefits of <code>useSelector</code>, follow these best practices:</p>
+<ol>
+<li>
+<p><strong>Targeted Data Selection:</strong> Use <code>useSelector</code> to pick out only the state pieces relevant to your component. For example, if you only need a user’s name, don’t fetch the entire user object.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> userName <span class="token operator">=</span> <span class="token function">useSelector</span><span class="token punctuation">(</span><span class="token parameter">state</span> <span class="token operator">=></span> state<span class="token punctuation">.</span>user<span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+<li>
+<p><strong>Memoizing Selectors:</strong> For complex selections, consider using memoized selectors with <code>reselect</code> to avoid unnecessary recalculations.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token function-variable function">selectUserName</span> <span class="token operator">=</span> <span class="token parameter">state</span> <span class="token operator">=></span> state<span class="token punctuation">.</span>user<span class="token punctuation">.</span>name<span class="token punctuation">;</span>
+<span class="token keyword">const</span> userName <span class="token operator">=</span> <span class="token function">useSelector</span><span class="token punctuation">(</span>selectUserName<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+<li>
+<p><strong>Component-Level Subscriptions:</strong> Ensure each component subscribes only to the slices of state it needs, avoiding blanket subscriptions to large store segments.</p>
+</li>
+</ol>
+<h2>Conclusion</h2>
+<p>In React/Redux applications, efficient rendering performance is crucial for a seamless user experience. By leveraging the <code>useSelector</code> hook, developers can significantly optimize their application's performance. This approach minimizes memory usage, reduces unnecessary rerenders, and speeds up component mounting, leading to a more responsive and efficient application.</p>
+<p>Selective store selection with <code>useSelector</code> is not just a performance optimization technique; it’s a fundamental best practice in React/Redux development. Embrace it to build faster, more efficient applications. Happy coding!</p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.5.0/prism-material-dark.min.css">
+</body>
+</html>

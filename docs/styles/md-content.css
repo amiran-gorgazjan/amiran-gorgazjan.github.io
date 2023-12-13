@@ -1,0 +1,44 @@
+.md-content {
+    font-family: system-ui, sans-serif;
+}
+
+.md-content h1 {
+    font-size: 2.5rem;
+    margin: 0 0 1rem 0;
+    font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+}
+
+.md-content h2 {
+    font-size: 2rem;
+    margin: 3rem 0 1rem 0;
+    font-weight: 400;
+}
+
+.md-content h3 {
+    margin: 2rem 0 1rem 0;
+    font-weight: 400;
+}
+
+.md-content p {
+    line-height: 2rem;
+    font-size: 1.1rem;
+    margin: 1rem 0;
+    font-weight: 200;
+}
+
+.md-content a {
+    color: #a5e844
+}
+
+.md-content a[href*="//"]:not([href*="localhost"]):after {
+    content: ' ↗️';
+    font-size: 0.75rem;
+    position: relative;
+    top: -0.25rem;
+}
+
+.md-content hr {
+    border: none;
+    border-bottom: 1px solid #aaa;
+    margin: 2rem 6rem;
+}

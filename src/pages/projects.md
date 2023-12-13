@@ -1,5 +1,6 @@
 ---
 layout: base.njk
+title: Projects
 ---
 
-Projects content
+# {{ title }}

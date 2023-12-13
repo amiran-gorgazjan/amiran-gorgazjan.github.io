@@ -1,5 +1,5 @@
 ---
-title: My Rad Blog
+title:
 ---
 
 <!doctype html>
@@ -8,18 +8,27 @@ title: My Rad Blog
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
-    <link rel="stylesheet" href="/styles/style.css">
+    <title>{{ 'Amiran Gorgazjan' if title == null else 'Amiran Gorgazjan | ' + title }}</title>
+    <link rel="stylesheet" href="/styles/global.css">
+    <link rel="stylesheet" href="/styles/sidebar.css">
+    <link rel="stylesheet" href="/styles/md-content.css">
 </head>
 
 <body>
     <div class="site-container">
-        {% include "sidebar.njk" %}
+        <div class="site-container__sidebar">
+            {% include "sidebar.njk" %}
+        </div>
 
-        <div class="md-content">
-            {{ content | safe }}
+        <div class="site-container__content-scroll">
+            <div class="site-container__content">
+                <div class="md-content">
+                    {{ content | safe }}
+                </div>
+            </div>
         </div>
     </div>
-</body>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.5.0/prism-material-dark.min.css">
+</body>
 </html>

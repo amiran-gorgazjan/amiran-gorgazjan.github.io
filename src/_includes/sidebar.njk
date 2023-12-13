@@ -1,20 +1,23 @@
 {% from "sidebarLink.njk" import sidebarLink with context %}
 
 <div class="sidebar">
+    <div class="sidebar__explorer">Explorer</div>
+
     <ul>
         <li>{{ sidebarLink('/', 'index.html') }}</li>
         <li>
-            {{ sidebarLink('/pages/projects', 'pages/') }}
+            {{ sidebarLink('/pages/projects', 'pages/', 'folder', true) }}
             <ul>
-                <li>{{ sidebarLink('/pages/projects', 'projects.html') }}</li>
-                <li>{{ sidebarLink('/pages/cv', 'cv.html') }}</li>
+                <li>{{ sidebarLink('/pages/projects', 'projects.html', 'html') }}</li>
+                <li>{{ sidebarLink('/pages/cv', 'cv.html', 'html') }}</li>
             </ul>
         </li>
         <li>
-            {{ sidebarLink('/posts/uvicorn-vs-gunicorn', 'posts/') }}
+            {{ sidebarLink('/posts/uvicorn-vs-gunicorn', 'posts/', 'folder', true) }}
             <ul>
-                <li>{{ sidebarLink('/posts/uvicorn-vs-gunicorn', 'uvicorn-vs-gunicorn.html') }}</li>
-                <li>{{ sidebarLink('/posts/signal-based-entity-system', 'signal-based-entity-system.html') }}</li>
+                <li>{{ sidebarLink('/posts/uvicorn-vs-gunicorn', 'uvicorn vs gunicorn.html', 'html') }}</li>
+                <li>{{ sidebarLink('/posts/signal-based-entity-system', 'signal based entity system.html', 'html') }}</li>
+                <li>{{ sidebarLink('/posts/the-power-of-useselector', 'the power of useSelector.html', 'html') }}</li>
             </ul>
         </li>
     </ul>

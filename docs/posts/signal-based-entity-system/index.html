@@ -5,35 +5,48 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Rad Blog</title>
-    <link rel="stylesheet" href="/styles/style.css">
+    <title>Amiran Gorgazjan | Building a Preact Signals-Based Entity System with Database Syncing Using `effect()`</title>
+    <link rel="stylesheet" href="/styles/global.css">
+    <link rel="stylesheet" href="/styles/sidebar.css">
+    <link rel="stylesheet" href="/styles/md-content.css">
 </head>
 
 <body>
     <div class="site-container">
-        
+        <div class="site-container__sidebar">
+            
 
 <div class="sidebar">
+    <div class="sidebar__explorer">Explorer</div>
+
     <ul>
         <li>
-    <a href="/" class="">
+    <a
+        href="/"
+        class=" ">
         index.html
     </a>
 </li>
         <li>
             
-    <a href="/pages/projects" class="">
+    <a
+        href="/pages/projects"
+        class="folder ">
         pages/
     </a>
 
             <ul>
                 <li>
-    <a href="/pages/projects" class="">
+    <a
+        href="/pages/projects"
+        class="html ">
         projects.html
     </a>
 </li>
                 <li>
-    <a href="/pages/cv" class="">
+    <a
+        href="/pages/cv"
+        class="html ">
         cv.html
     </a>
 </li>
@@ -41,31 +54,97 @@
         </li>
         <li>
             
-    <a href="/posts/uvicorn-vs-gunicorn" class="">
+    <a
+        href="/posts/uvicorn-vs-gunicorn"
+        class="folder ">
         posts/
     </a>
 
             <ul>
                 <li>
-    <a href="/posts/uvicorn-vs-gunicorn" class="">
-        uvicorn-vs-gunicorn.html
+    <a
+        href="/posts/uvicorn-vs-gunicorn"
+        class="html ">
+        uvicorn vs gunicorn.html
     </a>
 </li>
                 <li>
-    <a href="/posts/signal-based-entity-system" class="active">
-        signal-based-entity-system.html
+    <a
+        href="/posts/signal-based-entity-system"
+        class="html active">
+        signal based entity system.html
+    </a>
+</li>
+                <li>
+    <a
+        href="/posts/the-power-of-useselector"
+        class="html ">
+        the power of useSelector.html
     </a>
 </li>
             </ul>
         </li>
     </ul>
 </div>
+        </div>
 
-        <div class="md-content">
-            <h1>Signal Based Entity System</h1>
+        <div class="site-container__content-scroll">
+            <div class="site-container__content">
+                <div class="md-content">
+                    <h1>Building a Preact Signals-Based Entity System with Database Syncing Using <code>effect()</code></h1>
+<h2>Introduction</h2>
+<p>In the world of modern web development, managing state efficiently and effectively is crucial. Preact Signals, a fine-grained reactivity system, offers a compelling approach to state management. When combined with React's powerful <code>effect()</code> hook, we can create an entity system that's not only efficient but also synced seamlessly with a database. In this blog post, we'll explore how to build such a system.</p>
+<h2>What are Preact Signals?</h2>
+<p>Preact Signals are a part of the Preact ecosystem, a lightweight 3kB alternative to React with the same modern API. Signals provide a reactive state management solution that enables fine-grained control over how and when your components update.</p>
+<h2>Setting Up the Entity System</h2>
+<p>An entity system, in this context, refers to a method of managing application state, where each &quot;entity&quot; is a distinct piece of state.</p>
+<h3>Step 1: Define Your Entities</h3>
+<p>Start by defining the entities in your system. For instance, if you're building a task management app, your entities might be tasks, users, and projects.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">{</span> signal <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'preact/signals'</span><span class="token punctuation">;</span>
 
+<span class="token keyword">const</span> tasks <span class="token operator">=</span> <span class="token function">signal</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> users <span class="token operator">=</span> <span class="token function">signal</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> projects <span class="token operator">=</span> <span class="token function">signal</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h3>Step 2: Create Signal-Based State</h3>
+<p>With Preact Signals, you can create reactive state variables that update your components whenever they change.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> currentTask <span class="token operator">=</span> <span class="token function">signal</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h2>Syncing with a Database using <code>effect()</code></h2>
+<p>React's <code>effect()</code> hook is a powerful tool for performing side effects in function components. We'll use it to sync our entity system with a database.</p>
+<h3>Step 1: Establish a Database Connection</h3>
+<p>First, establish a connection to your database. This could be a REST API, Firebase, GraphQL endpoint, or any other type of database.</p>
+<h3>Step 2: Sync State to Database</h3>
+<p>Use the <code>effect()</code> hook to watch for changes in your entities and sync them with the database.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">{</span> useEffect <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
+
+<span class="token function">useEffect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// Function to update the database</span>
+  <span class="token keyword">const</span> <span class="token function-variable function">updateDatabase</span> <span class="token operator">=</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token comment">// API call to sync tasks</span>
+    <span class="token keyword">await</span> <span class="token function">syncToDatabase</span><span class="token punctuation">(</span>tasks<span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Call the function whenever tasks change</span>
+  tasks<span class="token punctuation">.</span><span class="token function">effect</span><span class="token punctuation">(</span>updateDatabase<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h2>Handling Database Responses</h2>
+<p>After syncing with the database, handle the responses to update your local state or manage errors.</p>
+<pre class="language-javascript"><code class="language-javascript">tasks<span class="token punctuation">.</span><span class="token function">effect</span><span class="token punctuation">(</span><span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> updatedTasks <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetchTasksFromDatabase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    tasks<span class="token punctuation">.</span>value <span class="token operator">=</span> updatedTasks<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>error<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"Failed to sync with database:"</span><span class="token punctuation">,</span> error<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h2>Conclusion</h2>
+<p>By leveraging Preact Signals for state management and React's <code>effect()</code> for side effects, we've created an efficient and robust entity system that stays in sync with a database. This approach offers a scalable and maintainable way to manage state in complex applications.</p>
+<p>Remember, the key to success with this setup is understanding the nuances of both Preact Signals and React's lifecycle hooks. Happy coding!</p>
+
+                </div>
+            </div>
         </div>
     </div>
-</body>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.5.0/prism-material-dark.min.css">
+</body>
 </html>

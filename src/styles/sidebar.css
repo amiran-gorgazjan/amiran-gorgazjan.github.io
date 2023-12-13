@@ -1,0 +1,45 @@
+.sidebar {
+    width: 250px;
+    background: #111;
+    padding: 1rem;
+    height: 100%;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar a {
+    display: block;
+    color: #ddd;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+}
+
+.sidebar a:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar a.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.sidebar li > ul > li > a {
+    padding-left: 2rem;
+}
+
+.sidebar a.folder {
+    background-image: url(../images/folder.svg);
+    background-repeat: no-repeat;
+    background-position: 1rem 0.5rem;
+}
+
+.sidebar a.html {
+    background-image: url(../images/html.svg);
+    background-repeat: no-repeat;
+    background-position: 0.5rem 0.35rem;
+    background-size: 1.2rem;
+}
