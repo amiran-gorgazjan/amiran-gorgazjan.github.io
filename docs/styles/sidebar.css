@@ -3,6 +3,15 @@
     height: 100%;
     padding: 1rem 0;
     background: #111;
+    user-select: none;
+}
+
+.sidebar__label {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    color: #999;
+    padding: 0 0 0.5rem 0.8rem;
+    cursor: default;
 }
 
 .sidebar ul {
@@ -15,7 +24,7 @@
     display: block;
     color: #ddd;
     text-decoration: none;
-    padding: 0.5rem 1rem 0.5rem 2rem;
+    padding: 0.5rem 1rem 0.5rem 2.5rem;
     white-space: nowrap;
 }
 
@@ -29,23 +38,23 @@
 }
 
 .sidebar li > ul > li > a {
-    padding-left: 3rem;
+    padding-left: 4rem;
 }
 
 .sidebar a.folder {
     background-image: url(../images/folder.svg);
     background-repeat: no-repeat;
-    background-position: 0.5rem 0.45rem;
+    background-position: 0.75rem 0.45rem;
     background-size: 1.1rem;
 }
 
 .sidebar a.html {
     background-image: url(../images/html.svg);
     background-repeat: no-repeat;
-    background-position: 0.5rem 0.4rem;
+    background-position: 0.7rem 0.4rem;
     background-size: 1.2rem;
 }
 
 .sidebar li > ul > li > a.html {
-    background-position-x: 1.5rem;
+    background-position-x: 2.25rem;
 }
