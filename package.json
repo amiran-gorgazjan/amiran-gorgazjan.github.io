@@ -1,9 +1,9 @@
 {
   "name": "amiran-gorgazjan.github.io",
   "module": "index.ts",
-  "type": "module",
   "scripts": {
-    "build": "npx @11ty/eleventy --input=./src --output=docs/"
+    "build": "npx @11ty/eleventy --input=./src --output=docs/",
+    "dev": "npx @11ty/eleventy --input=./src --output=docs/ --serve"
   },
   "devDependencies": {
     "bun-types": "latest"

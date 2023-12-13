@@ -1,0 +1,5 @@
+{% macro sidebarLink(href, label) %}
+    <a href="{{ href }}" class="{{ 'active' if (href == page.url) or ((href + '/') == page.url) }}">
+        {{ label }}
+    </a>
+{% endmacro %}

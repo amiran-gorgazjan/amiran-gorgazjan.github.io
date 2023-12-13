@@ -1,0 +1,21 @@
+{% from "sidebarLink.njk" import sidebarLink with context %}
+
+<div class="sidebar">
+    <ul>
+        <li>{{ sidebarLink('/', 'index.html') }}</li>
+        <li>
+            {{ sidebarLink('/pages/projects', 'pages/') }}
+            <ul>
+                <li>{{ sidebarLink('/pages/projects', 'projects.html') }}</li>
+                <li>{{ sidebarLink('/pages/cv', 'cv.html') }}</li>
+            </ul>
+        </li>
+        <li>
+            {{ sidebarLink('/posts/uvicorn-vs-gunicorn', 'posts/') }}
+            <ul>
+                <li>{{ sidebarLink('/posts/uvicorn-vs-gunicorn', 'uvicorn-vs-gunicorn.html') }}</li>
+                <li>{{ sidebarLink('/posts/signal-based-entity-system', 'signal-based-entity-system.html') }}</li>
+            </ul>
+        </li>
+    </ul>
+</div>
