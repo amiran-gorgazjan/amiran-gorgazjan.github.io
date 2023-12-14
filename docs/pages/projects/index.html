@@ -16,83 +16,98 @@
         <div class="site-container__sidebar">
             
 
-<div class="sidebar">
-    <div class="sidebar__label">Explorer</div>
+<div class="sidebar sidebar--open">
+    <div class="sidebar__close">✕</div>
+    <div class="sidebar__open">☰</div>
 
-    <ul>
-        <li>
+    <div class="sidebar__content">
+        <div class="sidebar__label">Explorer</div>
+
+        <ul>
+            <li>
     <a
         href="/"
         class="html ">
         index.html
     </a>
 </li>
-        <li>
-            
+            <li>
+                
     <a
         href="/pages/projects"
         class="folder ">
         pages/
     </a>
 
-            <ul>
-                <li>
+                <ul>
+                    <li>
     <a
         href="/pages/projects"
         class="html active">
         projects.html
     </a>
 </li>
-                <li>
+                    <li>
     <a
         href="/pages/cv"
         class="html ">
         cv.html
     </a>
 </li>
-            </ul>
-        </li>
-        <li>
-            
+                </ul>
+            </li>
+            <li>
+                
     <a
         href="/posts/uvicorn-vs-gunicorn"
         class="folder ">
         posts/
     </a>
 
-            <ul>
-                <li>
+                <ul>
+                    <li>
     <a
         href="/posts/defeating-procrastination-essay"
         class="html ">
         defeating procrastination - an essay.html
     </a>
 </li>
-                <li>
+                    <li>
     <a
         href="/posts/uvicorn-vs-gunicorn"
         class="html ">
         uvicorn vs gunicorn.html
     </a>
 </li>
-                <li>
+                    <li>
     <a
         href="/posts/signal-based-entity-system"
         class="html ">
         signal based entity system.html
     </a>
 </li>
-                <li>
+                    <li>
     <a
         href="/posts/the-power-of-useselector"
         class="html ">
         the power of useSelector.html
     </a>
 </li>
-            </ul>
-        </li>
-    </ul>
+                </ul>
+            </li>
+        </ul>
+    </div>
 </div>
+
+<script>
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarClose = document.querySelectorAll('.sidebar__close, .sidebar__open');
+
+    sidebarClose.forEach(el => el.addEventListener('click', () => {
+        sidebar.classList.toggle('sidebar--closed');
+        sidebar.classList.toggle('sidebar--open');
+    }));
+</script>
         </div>
 
         <div class="site-container__content-scroll">

@@ -4,7 +4,14 @@ layout: base.njk
 
 # <div style="text-align: center;">Amiran Gorgazjan</div>
 
-<hr/>
+<div style="margin: 3rem; font-size: 5rem; text-align: center; white-space: nowrap;">
+    <span style="position: relative; left: -0.6em;">
+        <span style="display: inline-block; position: relative; font-weight: 100; font-size: 0.97em; left: 1.2em">π</span>
+        <span style="display: inline-block; position: relative; font-size: 0.5em; transform: rotate(24.5deg); top: -0.5em; left: 0.7em;">﹀</span>
+        𓀔
+    </span>
+</div>
+
 
 Hello and thank you for visiting! I'm Amiran Gorgazjan, a seasoned Tech Lead and Senior Software Engineer with a passion for crafting beautiful, innovative and <em>efficient</em> software solutions. With over a decade of experience in the tech industry, I have honed my skills in a range of technologies and methodologies, leading teams to success in complex and dynamic environments.
 

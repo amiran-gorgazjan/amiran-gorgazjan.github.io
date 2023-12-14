@@ -1,9 +1,57 @@
 .sidebar {
     width: 100%;
     height: 100%;
-    padding: 1rem 0;
-    background: #111;
     user-select: none;
+    position: relative;
+}
+
+.sidebar__content {
+    padding: 1rem 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background: #111;
+}
+
+.sidebar--closed {
+    width: 0;
+    -webkit-transition: width 0.1s ease-in-out;
+}
+
+.sidebar--open {
+    -webkit-transition: width 0.1s ease-in-out;
+}
+
+.sidebar__close, .sidebar__open {
+    position: absolute;
+    top: 0.5rem;
+    width: 2rem;
+    height: 2rem;
+    background: #222;
+    color: #eee;
+    font-size: 1rem;
+    text-align: center;
+    line-height: 2.2rem;
+    cursor: pointer;
+}
+
+.sidebar__close {
+    right: 0.5rem;
+}
+
+.sidebar--closed .sidebar__close {
+    display: none;
+}
+
+.sidebar__open {
+    right: -2.5rem;
+    background: #111;
+    font-size: 1.5rem;
+    line-height: 1.8rem;
+}
+
+.sidebar--open .sidebar__open {
+    display: none;
 }
 
 .sidebar__label {

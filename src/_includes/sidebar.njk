@@ -1,25 +1,40 @@
 {% from "sidebarLink.njk" import sidebarLink with context %}
 
-<div class="sidebar">
-    <div class="sidebar__label">Explorer</div>
+<div class="sidebar sidebar--open">
+    <div class="sidebar__close">✕</div>
+    <div class="sidebar__open">☰</div>
 
-    <ul>
-        <li>{{ sidebarLink('/', 'index.html', 'html') }}</li>
-        <li>
-            {{ sidebarLink('/pages/projects', 'pages/', 'folder', true) }}
-            <ul>
-                <li>{{ sidebarLink('/pages/projects', 'projects.html', 'html') }}</li>
-                <li>{{ sidebarLink('/pages/cv', 'cv.html', 'html') }}</li>
-            </ul>
-        </li>
-        <li>
-            {{ sidebarLink('/posts/uvicorn-vs-gunicorn', 'posts/', 'folder', true) }}
-            <ul>
-                <li>{{ sidebarLink('/posts/defeating-procrastination-essay', 'defeating procrastination - an essay.html', 'html') }}</li>
-                <li>{{ sidebarLink('/posts/uvicorn-vs-gunicorn', 'uvicorn vs gunicorn.html', 'html') }}</li>
-                <li>{{ sidebarLink('/posts/signal-based-entity-system', 'signal based entity system.html', 'html') }}</li>
-                <li>{{ sidebarLink('/posts/the-power-of-useselector', 'the power of useSelector.html', 'html') }}</li>
-            </ul>
-        </li>
-    </ul>
+    <div class="sidebar__content">
+        <div class="sidebar__label">Explorer</div>
+
+        <ul>
+            <li>{{ sidebarLink('/', 'index.html', 'html') }}</li>
+            <li>
+                {{ sidebarLink('/pages/projects', 'pages/', 'folder', true) }}
+                <ul>
+                    <li>{{ sidebarLink('/pages/projects', 'projects.html', 'html') }}</li>
+                    <li>{{ sidebarLink('/pages/cv', 'cv.html', 'html') }}</li>
+                </ul>
+            </li>
+            <li>
+                {{ sidebarLink('/posts/uvicorn-vs-gunicorn', 'posts/', 'folder', true) }}
+                <ul>
+                    <li>{{ sidebarLink('/posts/defeating-procrastination-essay', 'defeating procrastination - an essay.html', 'html') }}</li>
+                    <li>{{ sidebarLink('/posts/uvicorn-vs-gunicorn', 'uvicorn vs gunicorn.html', 'html') }}</li>
+                    <li>{{ sidebarLink('/posts/signal-based-entity-system', 'signal based entity system.html', 'html') }}</li>
+                    <li>{{ sidebarLink('/posts/the-power-of-useselector', 'the power of useSelector.html', 'html') }}</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
 </div>
+
+<script>
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarClose = document.querySelectorAll('.sidebar__close, .sidebar__open');
+
+    sidebarClose.forEach(el => el.addEventListener('click', () => {
+        sidebar.classList.toggle('sidebar--closed');
+        sidebar.classList.toggle('sidebar--open');
+    }));
+</script>
