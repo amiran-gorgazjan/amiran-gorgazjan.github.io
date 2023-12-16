@@ -1,0 +1,45 @@
+.terminal {
+    background-color: #111;
+    color: #a5e844;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 12px;
+    line-height: 1rem;
+}
+
+.terminal:focus {
+    outline: none;
+}
+
+.terminal__output {
+    white-space: pre
+}
+
+.command-line__prompt {
+    white-space: pre
+}
+
+.command-line__cursor {
+    display: inline-block;
+    width: 0.5rem;
+    height: 1rem;
+    border: 1px solid #a5e844;
+    box-sizing: border-box;
+}
+
+.terminal:focus .command-line__cursor {
+    background-color: #a5e844;
+}
+
+.command-line {
+    display: flex;
+}
+
+.command-line__path {
+    margin-right: 0.5rem;
+}
+
+.command-line__prompt {
+
+}

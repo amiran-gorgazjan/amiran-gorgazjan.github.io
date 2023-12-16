@@ -8,10 +8,11 @@ title:
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ 'Amiran Gorgazjan' if title == null else 'Amiran Gorgazjan | ' + title }}</title>
+    <title>{{ 'Amiran Gorgazjan' if title == null else title + ' | Amiran Gorgazjan' }}</title>
     <link rel="stylesheet" href="/styles/global.css">
     <link rel="stylesheet" href="/styles/sidebar.css">
     <link rel="stylesheet" href="/styles/md-content.css">
+    <link rel="stylesheet" href="/styles/terminal.css">
 </head>
 
 <body>
@@ -26,6 +27,10 @@ title:
                     {{ content | safe }}
                 </div>
             </div>
+        </div>
+
+        <div class="site-container__terminal">
+            {% include "terminal.njk" %}
         </div>
     </div>
 

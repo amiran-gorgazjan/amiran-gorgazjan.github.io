@@ -23,6 +23,7 @@ a {
     display: flex;
     overflow: hidden;
     height: 100%;
+    position: relative;
 }
 
 .site-container__sidebar {
@@ -39,6 +40,14 @@ a {
     max-width: 650px;
     margin: 0 auto;
     padding: 2rem;
+}
+
+.site-container__terminal {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow-y: auto;
 }
 
 p.the {
