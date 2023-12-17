@@ -70,11 +70,9 @@ const email = {
                     subject: Math.max(fieldMaxLengths.subject, 'SUBJECT'.length)
                 }
 
-                console.log(maxLengths)
-
                 print(`${leftPad('ID', maxLengths.id)}  ${leftPad('FROM', maxLengths.from)}  SUBJECT`)
                 print(`${leftPad('-'.repeat(maxLengths.id), maxLengths.id)}  ${leftPad('-'.repeat(maxLengths.from), maxLengths.from)}  ${'-'.repeat(maxLengths.subject)}`)
-                
+
                 emails.forEach(email => {
                     const { id, from, subject } = email
                     print(`${leftPad(id, maxLengths.id)}   ${leftPad(from, maxLengths.from)}  ${subject}`)

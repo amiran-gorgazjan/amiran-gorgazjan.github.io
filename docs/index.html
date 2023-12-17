@@ -141,7 +141,7 @@
 </div>
 
 <script type="module">
-    import ls from '/modules/executables/ls.js';
+    import fs from '/modules/executables/fs.js';
     import email from '/modules/executables/email.js';
 
     const $output = document.getElementById('output');
@@ -177,6 +177,7 @@
             $cmd.style.display = style;
         } else {
             print(`Command not found: ${name}`);
+            print(`Type 'help' to list all available commands`)
         }
     };
 
@@ -194,7 +195,7 @@
             description: 'Clear the terminal screen',
             exec: clear,
         },
-        ...ls,
+        ...fs,
         ...email,
     };
 
