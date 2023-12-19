@@ -24,6 +24,10 @@ const emails = [
             The new password is: ayylmao123
             Please change it as soon as possible.
 
+            I also noticed that you haven't added a password to your machine.
+            Please add a password to your machine to prevent unauthorized access
+            to your files.
+
             Thanks,
             Maria (InfoSec @ Talesprout.com)
         `,
@@ -79,7 +83,7 @@ const email = {
                 })
             }
         },
-        read: {
+        show: {
             description: 'Read an email',
             exec: ({ print, params }) => {
                 const id = params[0]
@@ -105,7 +109,7 @@ const email = {
     exec: ({ print, params }) => {
         const subcommand = params[0]
 
-        if (!subcommand) {
+        if (!subcommand || subcommand === 'help') {
             print('Welcome to the inbox!')
             print('Available commands:\n')
             Object.entries(email.commands).forEach(([command, { description }]) => {
