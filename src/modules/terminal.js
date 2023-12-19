@@ -2,6 +2,7 @@ import fs, { getAutocompleteSuggestion } from '/modules/executables/fs.js';
 import email from '/modules/executables/email.js';
 import { $cwd, $input, $inputAllowed, $currentMachine } from '/modules/state.js';
 import { effect } from '/modules/signals.js';
+import koobas from '/modules/executables/koobas-cmd.js';
 
 const outputEl = document.getElementById('output');
 const promptEl = document.getElementById('prompt');
@@ -12,7 +13,7 @@ const pathEl = document.getElementById('path');
 const cliHistory = [];
 let historyIndex = 0;
 
-const print = (text) => {
+const safeText = (text) => {
     if (typeof text !== 'string') {
         try {
             text = JSON.stringify(text);
@@ -21,8 +22,16 @@ const print = (text) => {
         }
     }
 
-    text = text.split('\n').map(line => line.slice(0, 80)).join('\n');
-    outputEl.textContent += text + '\n';
+    return text.split('\n').map(line => line.slice(0, 80)).join('\n');
+}
+
+const print = (text) => {
+    outputEl.textContent += safeText(text) + '\n';
+    outputEl.scrollTop = outputEl.scrollHeight;
+};
+
+const dangerouslyPrintHTML = (html) => {
+    outputEl.innerHTML += html;
     outputEl.scrollTop = outputEl.scrollHeight;
 };
 
@@ -36,7 +45,16 @@ const exec = async (command) => {
     if (commands[name]) {
         const style = cmdEl.style.display;
         cmdEl.style.display = 'none';
-        await commands[name].exec({ print, clear, params });
+
+        try {
+            await commands[name].exec({
+                print, clear, dangerouslyPrintHTML,
+                params, terminalEl,
+            });
+        } catch (e) {
+            print(`Process exited with error: ${e.message}`);
+        }
+
         cmdEl.style.display = style;
     } else {
         print(`Command not found: ${name}`);
@@ -68,6 +86,7 @@ const commands = {
     },
     ...fs,
     ...email,
+    ...koobas,
 };
 
 terminalEl.addEventListener('keydown', async (e) => {
