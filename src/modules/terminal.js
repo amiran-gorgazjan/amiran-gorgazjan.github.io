@@ -22,16 +22,23 @@ const safeText = (text) => {
         }
     }
 
+    // Replace < and > with &lt; and &gt;
+    text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
     return text.split('\n').map(line => line.slice(0, 80)).join('\n');
 }
 
 const print = (text) => {
-    outputEl.textContent += safeText(text) + '\n';
+    outputEl.innerHTML += safeText(text) + '\n';
     outputEl.scrollTop = outputEl.scrollHeight;
 };
 
-const dangerouslyPrintHTML = (html) => {
-    outputEl.innerHTML += html;
+const dangerouslyPrintHTML = (html, { replace = false } = {}) => {
+    if (replace) {
+        outputEl.innerHTML = html;
+    } else {
+        outputEl.innerHTML += html;
+    }
+
     outputEl.scrollTop = outputEl.scrollHeight;
 };
 
@@ -45,6 +52,7 @@ const exec = async (command) => {
     if (commands[name]) {
         const style = cmdEl.style.display;
         cmdEl.style.display = 'none';
+        $inputAllowed.value = false;
 
         try {
             await commands[name].exec({
@@ -52,9 +60,11 @@ const exec = async (command) => {
                 params, terminalEl,
             });
         } catch (e) {
+            console.error(e);
             print(`Process exited with error: ${e.message}`);
         }
 
+        $inputAllowed.value = true;
         cmdEl.style.display = style;
     } else {
         print(`Command not found: ${name}`);
@@ -102,12 +112,11 @@ terminalEl.addEventListener('keydown', async (e) => {
             return;
         }
 
-        $inputAllowed.value = false;
+        
         print(`${pathEl.textContent} ${inputValue}`);
         cliHistory.push(inputValue);
         await exec(inputValue);
         $input.value = '';
-        $inputAllowed.value = true;
     } else if (e.keyCode === 8) {
         // Backspace
         $input.value = inputValue.slice(0, -1);

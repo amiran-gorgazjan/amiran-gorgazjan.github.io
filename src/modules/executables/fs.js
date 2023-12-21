@@ -181,7 +181,7 @@ function cd(inputPath) {
         return { error: 'not a directory: ' + inputPath }
     }
 
-    $cwd.value = normalizedPath
+    $cwd.value = getAbsolutePath(inputPath)
 
     return { success: true }
 }
