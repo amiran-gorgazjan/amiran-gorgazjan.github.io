@@ -32,14 +32,20 @@ const print = (text) => {
     outputEl.scrollTop = outputEl.scrollHeight;
 };
 
-const dangerouslyPrintHTML = (html, { replace = false } = {}) => {
+const dangerouslyPrintHTML = (html, { replace = false, deferredScroll = false } = {}) => {
     if (replace) {
         outputEl.innerHTML = html;
     } else {
         outputEl.innerHTML += html;
     }
 
-    outputEl.scrollTop = outputEl.scrollHeight;
+    if (deferredScroll) {
+        setTimeout(() => {
+            outputEl.scrollTop = outputEl.scrollHeight;
+        }, 10);
+    } else {
+        outputEl.scrollTop = outputEl.scrollHeight;
+    }
 };
 
 const clear = () => outputEl.textContent = '';

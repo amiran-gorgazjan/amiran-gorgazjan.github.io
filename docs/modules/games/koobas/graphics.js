@@ -5,17 +5,34 @@ import {
 import { getValueAt, setValueAt, mergeLayers } from '/modules/games/koobas/layers.js';
 
 export const graphics = {
-    [TRANSPARENT]: ' ',
-    [CAVE]: '<span style="color: #455A64">░</span>',
-    [MOUNTAIN]: '█',
-    [START]: '↓',
-    [END]: '↑',
-    [PLAYER]: '<span style="color: green;">☺</span>',
-    [APPLE]: '○',
-    [MONSTER]: '<span style="color: red;">Ψ</span>',
-    [GOLD]: '$',
-    [FOG]: ' ',
-    [SHOP]: 'S',
+    [TRANSPARENT]: { glyph: ' ', color: 'transparent' },
+    [CAVE]: { glyph: '░', color: '#222' },
+    [MOUNTAIN]: { glyph: '█', color: '#ccc' },
+    [START]: { glyph: '↓', color: '#777' },
+    [END]: { glyph: '↑', color: '#ff0' },
+    [PLAYER]: { glyph: '☺', color: '#ff0' },
+    [APPLE]: { glyph: '○', color: '#f00' },
+    [MONSTER]: { glyph: 'Ψ', color: '#f00' },
+    [GOLD]: { glyph: '$', color: '#ff0' },
+    [FOG]: { glyph: ' ', color: '#222' },
+    [SHOP]: { glyph: 'S', color: '#0ff' },
+
+    '▫': { glyph: '▫', color: '#ccc' },
+    '╔': { glyph: '╔', color: '#ccc' },
+    '╗': { glyph: '╗', color: '#ccc' },
+    '╚': { glyph: '╚', color: '#ccc' },
+    '╝': { glyph: '╝', color: '#ccc' },
+    '╦': { glyph: '╦', color: '#ccc' },
+    '╩': { glyph: '╩', color: '#ccc' },
+    '╠': { glyph: '╠', color: '#ccc' },
+    '╣': { glyph: '╣', color: '#ccc' },
+    '╬': { glyph: '╬', color: '#ccc' },
+    '═': { glyph: '═', color: '#ccc' },
+    '║': { glyph: '║', color: '#ccc' },
+    '╨': { glyph: '╨', color: '#ccc' },
+    '╥': { glyph: '╥', color: '#ccc' },
+    '╞': { glyph: '╞', color: '#ccc' },
+    '╡': { glyph: '╡', color: '#ccc' },
 }
 
 export function illuminate(fogLayer, caveLayer, position, visibility = 5) {
@@ -60,14 +77,30 @@ export function renderLayers(layers = []) {
     for (let y = 0; y < HEIGHT; y++) {
         let line = ''
 
+        let previousColor = null
+
         for (let x = 0; x < WIDTH; x++) {
             const value = getValueAt(merged, x, y)
+            const graphic = graphics[value]
 
-            if (typeof value === 'string') {
-                line += value
-            } else {
-                line += graphics[value]
+            if (!graphic) {
+                throw new Error(`Unknown graphic: ${value}`)
             }
+
+            if (graphic.color !== previousColor) {
+                if (previousColor !== null) {
+                    line += '</span>'
+                }
+
+                line += `<span style="color: ${graphic.color}">`
+            }
+
+            previousColor = graphic.color
+            line += graphic.glyph
+        }
+
+        if (previousColor !== null) {
+            line += '</span>'
         }
 
         lines.push(line)

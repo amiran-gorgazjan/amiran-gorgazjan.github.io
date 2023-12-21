@@ -21,7 +21,7 @@ const legend = Object.entries({
     [MONSTER]: 'Monster',
     [GOLD]: 'Gold',
     [SHOP]: 'Shop',
-}).map(([value, label]) => `${graphics[value]} ${label}`).join('  ')
+}).map(([value, label]) => `${graphics[value].glyph} ${label}`).join('  ')
 
 export function main({ print, clear, dangerouslyPrintHTML, terminalEl }) {
     return new Promise((resolve, reject) => {
@@ -58,7 +58,7 @@ export function main({ print, clear, dangerouslyPrintHTML, terminalEl }) {
 
             dangerouslyPrintHTML(
                 getPlayerStats(player) + '\n' + rendered + '\n' + legend,
-                { replace: true }
+                { replace: true, deferredScroll: true }
             )
         }
 

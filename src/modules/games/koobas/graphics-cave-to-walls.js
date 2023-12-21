@@ -83,9 +83,9 @@ export function caveToWalls(caveLayer) {
             const symbol = caveToSymbol[key]
 
             if (symbol) {
-                setValueAt(wallLayer, x, y, `<span style="color: white">${symbol}</span>`)
+                setValueAt(wallLayer, x, y, `${symbol}`)
             } else {
-                setValueAt(wallLayer, x, y, `<span style="color: white">${defaultWallSymbol}</span>`)
+                setValueAt(wallLayer, x, y, `${defaultWallSymbol}`)
             }
         }
     }
