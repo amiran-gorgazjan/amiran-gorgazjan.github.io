@@ -1,8 +1,8 @@
-var audio = new Audio('/modules/games/koobas/audio/files/punch1.wav');
+var audio = new Audio('/modules/games/koobas/audio-player/files/punch1.wav');
 
 const sounds = {
     'punch1': {
-        url: '/modules/games/koobas/audio/files/punch1.wav',
+        url: '/modules/games/koobas/audio-player/files/punch1.wav',
         volume: 0.5,
         buffer: null,
     },
@@ -35,7 +35,7 @@ export function loadAllSounds() {
     }));
 }
 
-export function play(name) {
+export function playAudio(name) {
     const sound = sounds[name];
 
     if (!sound) {
@@ -49,7 +49,7 @@ export function play(name) {
     source.loop = false;
 
     if (source.start) {
-        source.start(0);
+        source.start(source.context.currentTime);
     } else if (source.noteOn) {
         source.noteOn(0);
     }

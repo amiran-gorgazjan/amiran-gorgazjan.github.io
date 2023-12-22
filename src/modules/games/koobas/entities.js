@@ -1,26 +1,32 @@
 import { getValueAt } from "/modules/games/koobas/layers.js"
-import { CAVE } from "/modules/games/koobas/enums.js"
+import { CAVE, MOUNTAIN } from "/modules/games/koobas/enums.js"
 
 export const createPlayer = function() {
     return {
         position: { x: 0, y: 0 },
         health: 10,
         maxHealth: 10,
-        damage: 3,
+        damage: 1,
         luck: 0.20,
         visibility: 8,
         inventory: {
             gold: 0,
-            apples: 5,
+            apples: 0,
         },
     }
 }
 
 export const createMonster = function() {
     return {
-        position: { x: 0, y: 0 },
-        health: 10,
+        ...createPlayer(),
+        health: 3,
+        maxHealth: 3,
         damage: 1,
+        visibility: 7,
+        inventory: {
+            gold: 1 + Math.floor(Math.random() * 4),
+            apples: Math.floor(Math.random() * 3),
+        },
     }
 }
 
@@ -44,23 +50,89 @@ export const attemptMove = function(caveLayer, anyEntity, direction) {
     return true
 }
 
-export const attemptAttack = function(monsters, player, direction) {
-    const newX = player.position.x + direction.x
-    const newY = player.position.y + direction.y
+export const attemptAttack = function(targets, attacker, direction) {
+    const newX = attacker.position.x + direction.x
+    const newY = attacker.position.y + direction.y
 
-    const monster = monsters.find(monster => monster.position.x === newX && monster.position.y === newY)
+    for (const target of targets) {
+        if (target.position.x === newX && target.position.y === newY) {
+            target.health -= attacker.damage
 
-    if (!monster) {
+            if (target.health <= 0) {
+                target.health = 0
+
+                // Transfer inventory
+                Object.entries(target.inventory).forEach(([key, amount]) => {
+                    if (attacker.inventory[key] === undefined) {
+                        attacker.inventory[key] = 0
+                    }
+
+                    attacker.inventory[key] += amount
+                })
+            }
+
+            return true
+        }
+    }
+
+    return false
+}
+
+export const canEntitySeeTarget = function(entity, target, caveLayer) {
+    const distance = Math.sqrt(
+        Math.pow(target.position.x - entity.position.x, 2) +
+        Math.pow(target.position.y - entity.position.y, 2)
+    )
+
+    // Check if the target is within the visibility radius, first
+    if (distance > entity.visibility) {
         return false
     }
 
-    monster.health -= player.damage
+    // Check if there are any walls between the entity and the target
+    const deltaX = target.position.x - entity.position.x
+    const deltaY = target.position.y - entity.position.y
+    const angle = Math.atan2(deltaY, deltaX)
 
-    if (monster.health <= 0) {
-        monsters.splice(monsters.indexOf(monster), 1)
-        player.inventory.gold += Math.ceil(Math.random() * 20 * player.luck * monster.damage)
-        player.inventory.apples += Math.random() < player.luck ? 1 : 0
+    for (let i = 0; i < distance; i += 0.1) {
+        const x = Math.floor(entity.position.x + Math.cos(angle) * i)
+        const y = Math.floor(entity.position.y + Math.sin(angle) * i)
+
+        const value = getValueAt(caveLayer, x, y)
+
+        if (value !== CAVE) {
+            return false
+        }
     }
 
     return true
+}
+
+export const getDirectionFromTowards = function(anyEntity, target) {
+    const deltaX = target.position.x - anyEntity.position.x
+    const deltaY = target.position.y - anyEntity.position.y
+    const angle = Math.atan2(deltaY, deltaX)
+
+    return {
+        x: Math.round(Math.cos(angle)),
+        y: Math.round(Math.sin(angle)),
+    }
+}
+
+// Same as above, but can only move Up, Down, Left, or Right
+export const getAdjacentDirectionFromTowards = function(anyEntity, target) {
+    const deltaX = target.position.x - anyEntity.position.x
+    const deltaY = target.position.y - anyEntity.position.y
+
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        return {
+            x: Math.sign(deltaX),
+            y: 0,
+        }
+    } else {
+        return {
+            x: 0,
+            y: Math.sign(deltaY),
+        }
+    }
 }

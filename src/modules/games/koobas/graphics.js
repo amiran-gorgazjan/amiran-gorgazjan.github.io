@@ -11,13 +11,13 @@ export const graphics = {
     [START]: { glyph: '↓', color: '#777' },
     [END]: { glyph: '↑', color: '#ff0' },
     [PLAYER]: { glyph: '☺', color: '#ff0' },
-    [APPLE]: { glyph: '○', color: '#f00' },
+    [APPLE]: { glyph: 'ტ', color: '#f00' },
     [MONSTER]: { glyph: 'Ψ', color: '#f00' },
     [GOLD]: { glyph: '$', color: '#ff0' },
     [FOG]: { glyph: ' ', color: '#222' },
     [SHOP]: { glyph: 'S', color: '#0ff' },
 
-    '▫': { glyph: '▫', color: '#ccc' },
+    '▫': { glyph: '█', color: '#ccc' },
     '╔': { glyph: '╔', color: '#ccc' },
     '╗': { glyph: '╗', color: '#ccc' },
     '╚': { glyph: '╚', color: '#ccc' },
@@ -81,7 +81,13 @@ export function renderLayers(layers = []) {
 
         for (let x = 0; x < WIDTH; x++) {
             const value = getValueAt(merged, x, y)
-            const graphic = graphics[value]
+            let graphic;
+
+            if (typeof value === 'object' && value !== null) {
+                graphic = value
+            } else {
+                graphic = graphics[value]
+            }
 
             if (!graphic) {
                 throw new Error(`Unknown graphic: ${value}`)
