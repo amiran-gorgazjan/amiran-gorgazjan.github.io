@@ -1,6 +1,7 @@
 import { createMonster, setPosition } from "/modules/games/koobas/entities.js"
 import { createLayer, setValueAt, getValueAt } from "/modules/games/koobas/layers.js"
 import { MOUNTAIN, WIDTH, HEIGHT, CAVE } from "/modules/games/koobas/enums.js"
+import { replaceDeepWallsWithPathTiles } from "/modules/games/koobas/procedural-cleanup.js"
 
 export function createCaveLayer() {
     const layer = createLayer(MOUNTAIN)
@@ -43,7 +44,9 @@ export function createCaveLayer() {
         continue
     }
 
-    return { layer, start: { x: startX, y: startY }, end: { x, y } }
+    const cleanLayer = replaceDeepWallsWithPathTiles(layer, startX, startY)
+
+    return { layer: cleanLayer, start: { x: startX, y: startY }, end: { x, y } }
 }
 
 export function removeSingleWalls(layer) {

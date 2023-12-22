@@ -6,7 +6,7 @@ import { getValueAt, setValueAt, mergeLayers } from '/modules/games/koobas/layer
 
 export const graphics = {
     [TRANSPARENT]: { glyph: ' ', color: 'transparent' },
-    [CAVE]: { glyph: '░', color: '#222' },
+    [CAVE]: { glyph: '░', color: '#333' },
     [MOUNTAIN]: { glyph: '█', color: '#ccc' },
     [START]: { glyph: '↓', color: '#777' },
     [END]: { glyph: '↑', color: '#ff0' },
