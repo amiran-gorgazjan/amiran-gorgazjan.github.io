@@ -6,8 +6,8 @@
     padding: 0.5rem;
     box-sizing: border-box;
     font-family: 'Chicago', 'FixedSys', 'Roboto Mono', monospace;
-    font-size: 16px;
-    line-height: 16px;
+    font-size: 24px;
+    line-height: 24px;
     text-shadow: 0 0 20px rgba(165,232,68, 0.20);
 
     background: radial-gradient(
@@ -30,6 +30,10 @@
     outline: none;
 }
 
+.terminal.shake {
+    animation: shake 0.5s infinite;
+}
+
 .terminal__output {
     white-space: pre
 }
@@ -40,8 +44,8 @@
 
 .command-line__cursor {
     display: inline-block;
-    width: 0.5rem;
-    height: 1rem;
+    width: 0.5em;
+    height: 1em;
     border: 1px solid #a5e844;
     box-sizing: border-box;
 }
@@ -60,4 +64,13 @@
 
 .command-line__prompt {
 
+}
+
+@keyframes shake {
+    0% { transform: skewX(-1deg) skewY(-1deg) rotate(-1deg) translate(0, 0); }
+    5% { transform: skewX(1deg) skewY(1deg) rotate(1deg) translate(5px, 5px); }
+    10% { transform: skewX(-0.5deg) skewY(-0.5deg) rotate(-0.5deg) translate(-5px, -5px); }
+    15% { transform: skewX(0.5deg) skewY(0.5deg) rotate(-0.5deg) translate(-2px, -2px); }
+    20% { transform: skewX(0deg) skewY(0deg) rotate(0deg) translate(0, 0); }
+    100% { transform: skewX(0deg) skewY(0deg) rotate(0deg) translate(0, 0); }
 }

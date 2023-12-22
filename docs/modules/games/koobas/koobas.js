@@ -4,6 +4,7 @@ import { createLayer, setValueAt } from '/modules/games/koobas/layers.js'
 import { createCaveLayer, createMonsters } from '/modules/games/koobas/procedural.js'
 import { END, START, PLAYER, APPLE, MONSTER, GOLD, SHOP, FOG, TRANSPARENT } from '/modules/games/koobas/enums.js'
 import { caveToWalls } from '/modules/games/koobas/graphics-cave-to-walls.js'
+import { loadAllSounds, playAudio } from './audio-player/audio-player.js'
 
 function getPlayerStats(player) {
     return [
@@ -23,8 +24,10 @@ const legend = Object.entries({
     [SHOP]: 'Shop',
 }).map(([value, label]) => `${graphics[value].glyph} ${label}`).join('  ')
 
-export function main({ print, clear, dangerouslyPrintHTML, terminalEl }) {
-    return new Promise((resolve, reject) => {
+export function main({ print, clear, dangerouslyPrintHTML, terminalEl, shake }) {
+    return new Promise(async (resolve, reject) => {
+        await loadAllSounds()
+
         const caveLayerResult = createCaveLayer()
         const staticItemsLayer = createLayer()
         const player = createPlayer()
@@ -92,6 +95,9 @@ export function main({ print, clear, dangerouslyPrintHTML, terminalEl }) {
 
                 if (!attackedMonster) {
                     attemptMove(caveLayerResult, player, direction)
+                } else {
+                    playAudio('punch1')
+                    shake()
                 }
             }
 

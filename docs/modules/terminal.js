@@ -48,6 +48,14 @@ const dangerouslyPrintHTML = (html, { replace = false, deferredScroll = false } 
     }
 };
 
+// Shake the terminal for 100 ms
+const shake = () => {
+    terminalEl.classList.add('shake');
+    setTimeout(() => {
+        terminalEl.classList.remove('shake');
+    }, 100);
+};
+
 const clear = () => outputEl.textContent = '';
 
 const exec = async (command) => {
@@ -63,7 +71,7 @@ const exec = async (command) => {
         try {
             await commands[name].exec({
                 print, clear, dangerouslyPrintHTML,
-                params, terminalEl,
+                params, terminalEl, shake,
             });
         } catch (e) {
             console.error(e);
