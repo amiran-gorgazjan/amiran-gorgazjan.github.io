@@ -32,21 +32,40 @@ const print = (text) => {
     outputEl.scrollTop = outputEl.scrollHeight;
 };
 
-const dangerouslyPrintHTML = (html, { replace = false, deferredScroll = false } = {}) => {
+const dangerouslyPrintHTML = (html, { replace = false } = {}) => {
     if (replace) {
         outputEl.innerHTML = html;
     } else {
         outputEl.innerHTML += html;
     }
 
-    if (deferredScroll) {
-        setTimeout(() => {
-            outputEl.scrollTop = outputEl.scrollHeight;
-        }, 10);
-    } else {
+    setTimeout(() => {
         outputEl.scrollTop = outputEl.scrollHeight;
-    }
+    }, 100);
 };
+
+// replaces the innerHTML with the new lines
+// each line has a DIV with an id of line-<index>
+// if the line is exactly the same as the previous one, it won't be replaced
+// Order must always be the same and all the lines must be present every render
+const lastLines = [];
+const optimisedDangerousLinePrint = (lines = []) => {
+    lines.forEach((line, index) => {
+        if (lastLines[index] === line) {
+            return;
+        }
+
+        const maybeLineEl = outputEl.querySelector(`#line-${index}`);
+
+        if (maybeLineEl) {
+            maybeLineEl.innerHTML = line;
+        } else {
+            outputEl.innerHTML += `<div id="line-${index}">${line}</div>`;
+        }
+
+        lastLines[index] = line;
+    });
+}
 
 // Shake the terminal for 100 ms
 const shake = () => {
@@ -70,7 +89,7 @@ const exec = async (command) => {
 
         try {
             await commands[name].exec({
-                print, clear, dangerouslyPrintHTML,
+                print, clear, dangerouslyPrintHTML, optimisedDangerousLinePrint,
                 params, terminalEl, shake,
             });
         } catch (e) {

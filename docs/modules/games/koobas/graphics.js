@@ -69,7 +69,7 @@ export function illuminate(fogLayer, caveLayer, position, visibility = 5) {
     }
 }
 
-export function renderLayers(layers = []) {
+export function renderLayersAsLines(layers = []) {
     const merged = mergeLayers(layers)
 
     let lines = []
@@ -112,6 +112,6 @@ export function renderLayers(layers = []) {
         lines.push(line)
     }
 
-    return lines.join('\n')
+    return lines
 }
 
