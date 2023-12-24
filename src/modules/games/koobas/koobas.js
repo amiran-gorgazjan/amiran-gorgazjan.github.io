@@ -26,6 +26,7 @@ const legend = Object.entries({
 }).map(([value, label]) => `${graphics[value].glyph} ${label}`).join('  ')
 
 let player = null
+let currentLevel = 0
 
 function startNewLevel({ print, dangerouslyPrintHTML, terminalEl, shake, resolve, reject }) {
     if (!player) {
@@ -34,7 +35,7 @@ function startNewLevel({ print, dangerouslyPrintHTML, terminalEl, shake, resolve
 
     const caveLayerResult = createCaveLayer()
     const staticItemsLayer = createLayer()
-    let monsters = createMonsters(caveLayerResult)
+    let monsters = createMonsters(caveLayerResult, currentLevel)
 
     setPosition(player, caveLayerResult.start)
 
@@ -70,6 +71,27 @@ function startNewLevel({ print, dangerouslyPrintHTML, terminalEl, shake, resolve
         )
     }
 
+    function handlePlayerDeath() {
+        player = null
+        currentLevel = 0
+        playAudio('player-death')
+        cleanup()
+        startNewLevel({ print, dangerouslyPrintHTML, terminalEl, shake, resolve, reject })
+    }
+
+    function ascend() {
+        currentLevel += 1
+        playAudio('ascend')
+        cleanup()
+        startNewLevel({ print, dangerouslyPrintHTML, terminalEl, shake, resolve, reject })
+    }
+
+    function eatApple(entity) {
+        entity.health = Math.min(entity.health + 3, entity.maxHealth)
+        entity.inventory.apples -= 1
+        playAudio('apple-bite-1')
+    }
+
     function handleKeyDownEvent(e) {
         if (e.key === 'c' && e.ctrlKey) {
             e.preventDefault()
@@ -97,9 +119,7 @@ function startNewLevel({ print, dangerouslyPrintHTML, terminalEl, shake, resolve
             // Eat apple
             if (player.inventory.apples > 0) {
                 actionTaken = true
-                player.health = Math.min(player.health + 3, player.maxHealth)
-                player.inventory.apples -= 1
-                playAudio('apple-bite-1')
+                eatApple(player)
             }
         }
 
@@ -118,9 +138,7 @@ function startNewLevel({ print, dangerouslyPrintHTML, terminalEl, shake, resolve
             }
 
             if (player.position.x === caveLayerResult.end.x && player.position.y === caveLayerResult.end.y) {
-                playAudio('ascend')
-                cleanup()
-                startNewLevel({ print, dangerouslyPrintHTML, terminalEl, shake, resolve, reject })
+                ascend()
                 return
             }
 
@@ -146,11 +164,7 @@ function startNewLevel({ print, dangerouslyPrintHTML, terminalEl, shake, resolve
 
             // Player ded?
             if (player.health <= 0) {
-                print('You died')
-                playAudio('player-death')
-                cleanup()
-                player = null
-                startNewLevel({ print, dangerouslyPrintHTML, terminalEl, shake, resolve, reject })
+                handlePlayerDeath()
                 return
             }
         }
@@ -176,7 +190,10 @@ function startNewLevel({ print, dangerouslyPrintHTML, terminalEl, shake, resolve
 export function main({ print, dangerouslyPrintHTML, terminalEl, shake }) {
     return new Promise(async (resolve, reject) => {
         await loadAllSounds()
+
         player = null
+        currentLevel = 0
+
         startNewLevel({ print, dangerouslyPrintHTML, terminalEl, shake, resolve, reject })
     })
 }
