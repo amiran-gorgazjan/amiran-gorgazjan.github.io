@@ -3,22 +3,22 @@ var audio = new Audio('/modules/games/koobas/audio-player/files/punch1.wav');
 const sounds = {
     'punch1': {
         url: '/modules/games/koobas/audio-player/files/punch1.wav',
-        volume: 0.5,
         buffer: null,
     },
     'apple-bite-1': {
         url: '/modules/games/koobas/audio-player/files/apple-bite-1.mp3',
-        volume: 0.5,
         buffer: null,
     },
     'player-death': {
         url: '/modules/games/koobas/audio-player/files/player-death.wav',
-        volume: 0.5,
         buffer: null,
     },
     'step': {
         url: '/modules/games/koobas/audio-player/files/step.wav',
-        volume: 0.5,
+        buffer: null,
+    },
+    'ascend': {
+        url: '/modules/games/koobas/audio-player/files/ascend.wav',
         buffer: null,
     },
 }

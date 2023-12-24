@@ -25,8 +25,13 @@ const legend = Object.entries({
     [SHOP]: 'Shop',
 }).map(([value, label]) => `${graphics[value].glyph} ${label}`).join('  ')
 
-function start({ print, dangerouslyPrintHTML, terminalEl, shake, resolve, reject }) {
-    const player = createPlayer()
+let player = null
+
+function startNewLevel({ print, dangerouslyPrintHTML, terminalEl, shake, resolve, reject }) {
+    if (!player) {
+        player = createPlayer()
+    }
+
     const caveLayerResult = createCaveLayer()
     const staticItemsLayer = createLayer()
     let monsters = createMonsters(caveLayerResult)
@@ -73,6 +78,7 @@ function start({ print, dangerouslyPrintHTML, terminalEl, shake, resolve, reject
         }
 
         // Arrow keys
+        let actionTaken = false
         let direction = null
 
         if (e.key === 'ArrowLeft') {
@@ -86,8 +92,11 @@ function start({ print, dangerouslyPrintHTML, terminalEl, shake, resolve, reject
         }
 
         if (e.key === 'a') {
+            e.preventDefault()
+
             // Eat apple
             if (player.inventory.apples > 0) {
+                actionTaken = true
                 player.health = Math.min(player.health + 3, player.maxHealth)
                 player.inventory.apples -= 1
                 playAudio('apple-bite-1')
@@ -96,6 +105,8 @@ function start({ print, dangerouslyPrintHTML, terminalEl, shake, resolve, reject
 
         if (direction) {
             e.preventDefault()
+            actionTaken = true
+
             const attackedMonster = attemptAttack(monsters, player, direction)
 
             if (!attackedMonster) {
@@ -106,10 +117,19 @@ function start({ print, dangerouslyPrintHTML, terminalEl, shake, resolve, reject
                 shake()
             }
 
+            if (player.position.x === caveLayerResult.end.x && player.position.y === caveLayerResult.end.y) {
+                playAudio('ascend')
+                cleanup()
+                startNewLevel({ print, dangerouslyPrintHTML, terminalEl, shake, resolve, reject })
+                return
+            }
+
             // Remove dead monsters
             monsters = monsters.filter(monster => monster.health > 0)
+        }
 
-            // Monster actions
+        // Monster actions
+        if (actionTaken) {
             for (const monster of monsters) {
                 if (canEntitySeeTarget(monster, player, caveLayerResult.layer)) {
                     monster.style = { glyph: graphics[MONSTER].glyph, color: '#ff0000' }
@@ -129,7 +149,8 @@ function start({ print, dangerouslyPrintHTML, terminalEl, shake, resolve, reject
                 print('You died')
                 playAudio('player-death')
                 cleanup()
-                start({ print, dangerouslyPrintHTML, terminalEl, shake, resolve, reject })
+                player = null
+                startNewLevel({ print, dangerouslyPrintHTML, terminalEl, shake, resolve, reject })
                 return
             }
         }
@@ -155,6 +176,7 @@ function start({ print, dangerouslyPrintHTML, terminalEl, shake, resolve, reject
 export function main({ print, dangerouslyPrintHTML, terminalEl, shake }) {
     return new Promise(async (resolve, reject) => {
         await loadAllSounds()
-        start({ print, dangerouslyPrintHTML, terminalEl, shake, resolve, reject })
+        player = null
+        startNewLevel({ print, dangerouslyPrintHTML, terminalEl, shake, resolve, reject })
     })
 }
