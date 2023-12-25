@@ -69,7 +69,7 @@ export function illuminate(fogLayer, caveLayer, position, visibility = 5) {
     }
 }
 
-export function renderLayersAsLines(layers = []) {
+export function renderLayersAsLines(layers = [], visibilityLayer = null) {
     const merged = mergeLayers(layers)
 
     let lines = []
@@ -78,9 +78,11 @@ export function renderLayersAsLines(layers = []) {
         let line = ''
 
         let previousColor = null
+        let previousOpacity = null
 
         for (let x = 0; x < WIDTH; x++) {
             const value = getValueAt(merged, x, y)
+            const visibility = getValueAt(visibilityLayer, x, y)
             let graphic;
 
             if (typeof value === 'object' && value !== null) {
@@ -89,19 +91,25 @@ export function renderLayersAsLines(layers = []) {
                 graphic = graphics[value]
             }
 
+            graphic = {
+                ...graphic,
+                opacity: visibility === FOG ? 0.2 : 1,
+            }
+
             if (!graphic) {
                 throw new Error(`Unknown graphic: ${value}`)
             }
 
-            if (graphic.color !== previousColor) {
+            if (graphic.color !== previousColor || graphic.opacity !== previousOpacity) {
                 if (previousColor !== null) {
                     line += '</span>'
                 }
 
-                line += `<span style="color: ${graphic.color}">`
+                line += `<span style="color: ${graphic.color}; opacity: ${graphic.opacity}">`
             }
 
             previousColor = graphic.color
+            previousOpacity = graphic.opacity
             line += graphic.glyph
         }
 

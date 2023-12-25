@@ -3,7 +3,7 @@ import { attemptAttack, attemptMove, setPosition, createPlayer, canEntitySeeTarg
 import { createLayer, setValueAt } from '/modules/games/koobas/layers.js'
 import { createCaveLayer, createMonsters } from '/modules/games/koobas/procedural.js'
 import { replaceDeepWallsWithPathTiles } from '/modules/games/koobas/procedural-cleanup.js'
-import { END, START, PLAYER, APPLE, MONSTER, GOLD, SHOP, FOG, TRANSPARENT } from '/modules/games/koobas/enums.js'
+import { END, START, PLAYER, APPLE, MONSTER, GOLD, SHOP, FOG } from '/modules/games/koobas/enums.js'
 import { caveToWalls } from '/modules/games/koobas/graphics-cave-to-walls.js'
 import { loadAllSounds, playAudio } from './audio-player/audio-player.js'
 
@@ -28,7 +28,7 @@ const legend = Object.entries({
 let player = null
 let currentLevel = 0
 
-function startNewLevel({ print, dangerouslyPrintHTML, optimisedDangerousLinePrint, terminalEl, shake, resolve, reject }) {
+function startNewLevel({ print, optimisedDangerousLinePrint, terminalEl, shake, resolve, reject }) {
     if (!player) {
         player = createPlayer()
     }
@@ -49,7 +49,10 @@ function startNewLevel({ print, dangerouslyPrintHTML, optimisedDangerousLinePrin
     
     function render() {
         illuminate(fogLayer, caveLayerResult.layer, player.position, player.visibility)
-        
+
+        const visibilityLayer = createLayer(FOG)
+        illuminate(visibilityLayer, caveLayerResult.layer, player.position, player.visibility)
+
         const entityLayer = createLayer()
         setValueAt(entityLayer, player.position.x, player.position.y, PLAYER)
 
@@ -63,19 +66,13 @@ function startNewLevel({ print, dangerouslyPrintHTML, optimisedDangerousLinePrin
             staticItemsLayer,
             entityLayer,
             fogLayer
-        ])
+        ], visibilityLayer)
 
         optimisedDangerousLinePrint([
             getPlayerStats(player),
             ...rendered,
             legend,
         ])
-
-        // dangerouslyPrintHTML(
-        //     getPlayerStats(player) + '\n' + rendered.join('\n') + '\n' + legend,
-        //     { replace: true, deferredScroll: true }
-        // )
-
     }
 
     function handlePlayerDeath() {
@@ -83,14 +80,14 @@ function startNewLevel({ print, dangerouslyPrintHTML, optimisedDangerousLinePrin
         currentLevel = 0
         playAudio('player-death')
         cleanup()
-        startNewLevel({ print, dangerouslyPrintHTML, optimisedDangerousLinePrint, terminalEl, shake, resolve, reject })
+        startNewLevel({ print, optimisedDangerousLinePrint, terminalEl, shake, resolve, reject })
     }
 
     function ascend() {
         currentLevel += 1
         playAudio('ascend')
         cleanup()
-        startNewLevel({ print, dangerouslyPrintHTML, optimisedDangerousLinePrint, terminalEl, shake, resolve, reject })
+        startNewLevel({ print, optimisedDangerousLinePrint, terminalEl, shake, resolve, reject })
     }
 
     function eatApple(entity) {
@@ -194,13 +191,15 @@ function startNewLevel({ print, dangerouslyPrintHTML, optimisedDangerousLinePrin
     render()
 }
 
-export function main({ print, dangerouslyPrintHTML, optimisedDangerousLinePrint, terminalEl, shake }) {
+export function main({ print, optimisedDangerousLinePrint, terminalEl, shake, clear }) {
     return new Promise(async (resolve, reject) => {
+        print('Loading...')
+        clear()
         await loadAllSounds()
 
         player = null
         currentLevel = 0
 
-        startNewLevel({ print, dangerouslyPrintHTML, optimisedDangerousLinePrint, terminalEl, shake, resolve, reject })
+        startNewLevel({ print, optimisedDangerousLinePrint, terminalEl, shake, resolve, reject })
     })
 }
