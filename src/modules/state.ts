@@ -1,4 +1,4 @@
-import { signal } from "/modules/signals.js";
+import { signal } from "/modules/signals";
 
 export const $cwd = signal('/srv/public');
 export const $currentMachine = signal('amiran');

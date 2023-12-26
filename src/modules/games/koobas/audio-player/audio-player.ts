@@ -1,15 +1,35 @@
-var audio = new Audio('/modules/games/koobas/audio-player/files/punch1.wav');
-
-const sounds = {
-    'punch1': {
-        url: '/modules/games/koobas/audio-player/files/punch1.wav',
-        volume: 0.5,
-        buffer: null,
-    },
+type Sound = {
+    url: string,
+    buffer: AudioBuffer | null,
 }
+
+const soundNames = [
+    'punch1',
+    'apple-bite-1',
+    'player-death',
+    'step',
+    'ascend',
+] as const
+type SoundName = typeof soundNames[number]
+
+function SOUND(soundName: SoundName, extension: 'wav' | 'mp3'): Sound {
+    return {
+        url: `/modules/games/koobas/audio-player/files/${soundName}.${extension}`,
+        buffer: null,
+    }
+}
+
+const sounds: Record<SoundName, Sound> = {
+    'punch1': SOUND('punch1', 'wav'),
+    'apple-bite-1': SOUND('apple-bite-1', 'mp3'),
+    'player-death': SOUND('player-death', 'wav'),
+    'step': SOUND('step', 'wav'),
+    'ascend': SOUND('ascend', 'wav'),
+}
+
 var context = new AudioContext();
 
-function loadSound(url) {
+function loadSound(url: string): Promise<AudioBuffer> {
     return new Promise((resolve, reject) => {
         const request = new XMLHttpRequest();
         request.open('GET', url, true);
@@ -35,7 +55,7 @@ export function loadAllSounds() {
     }));
 }
 
-export function playAudio(name) {
+export function playAudio(name: SoundName) {
     const sound = sounds[name];
 
     if (!sound) {
@@ -47,10 +67,5 @@ export function playAudio(name) {
     source.buffer = sound.buffer;
     source.connect(context.destination);
     source.loop = false;
-
-    if (source.start) {
-        source.start(source.context.currentTime);
-    } else if (source.noteOn) {
-        source.noteOn(0);
-    }
+    source.start(source.context.currentTime);
 }

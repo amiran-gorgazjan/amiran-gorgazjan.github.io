@@ -3,10 +3,12 @@
   "module": "index.ts",
   "scripts": {
     "build": "npx @11ty/eleventy --input=./src --output=docs/",
-    "dev": "npx @11ty/eleventy --input=./src --output=docs/ --serve"
+    "dev": "npx @11ty/eleventy --input=./src --output=docs/ --serve",
+    "build-terminal": "bun build ./src/modules/terminal.ts --outdir ./docs/build"
   },
   "devDependencies": {
     "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.0",
+    "@types/web": "^0.0.130",
     "bun-types": "latest"
   },
   "peerDependencies": {

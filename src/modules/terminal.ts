@@ -1,19 +1,19 @@
-import fs, { getAutocompleteSuggestion } from '/modules/executables/fs.js';
-import email from '/modules/executables/email.js';
-import { $cwd, $input, $inputAllowed, $currentMachine } from '/modules/state.js';
-import { effect } from '/modules/signals.js';
-import koobas from '/modules/executables/koobas-cmd.js';
+import fs, { getAutocompleteSuggestion } from '/modules/executables/fs';
+import email from '/modules/executables/email';
+import { $cwd, $input, $inputAllowed, $currentMachine } from '/modules/state';
+import { effect } from '/modules/signals';
+import koobas from '/modules/executables/koobas-cmd';
 
-const outputEl = document.getElementById('output');
-const promptEl = document.getElementById('prompt');
-const terminalEl = document.getElementById('terminal');
-const cmdEl = document.getElementById('cmd');
-const pathEl = document.getElementById('path');
+const outputEl = document.getElementById('output')!;
+const promptEl = document.getElementById('prompt')!;
+const terminalEl = document.getElementById('terminal')!;
+const cmdEl = document.getElementById('cmd')!;
+const pathEl = document.getElementById('path')!;
 
-const cliHistory = [];
+const cliHistory : string[] = [];
 let historyIndex = 0;
 
-const safeText = (text) => {
+const safeText = (text: string) => {
     if (typeof text !== 'string') {
         try {
             text = JSON.stringify(text);
@@ -27,12 +27,12 @@ const safeText = (text) => {
     return text.split('\n').map(line => line.slice(0, 80)).join('\n');
 }
 
-const print = (text) => {
+const print = (text: string) => {
     outputEl.innerHTML += safeText(text) + '\n';
     outputEl.scrollTop = outputEl.scrollHeight;
 };
 
-const dangerouslyPrintHTML = (html, { replace = false } = {}) => {
+const dangerouslyPrintHTML = (html: string, { replace = false } = {}) => {
     if (replace) {
         outputEl.innerHTML = html;
     } else {
@@ -48,8 +48,8 @@ const dangerouslyPrintHTML = (html, { replace = false } = {}) => {
 // each line has a DIV with an id of line-<index>
 // if the line is exactly the same as the previous one, it won't be replaced
 // Order must always be the same and all the lines must be present every render
-const lastLines = [];
-const optimisedDangerousLinePrint = (lines = []) => {
+const lastLines: string[] = [];
+const optimisedDangerousLinePrint = (lines : string[] = []) => {
     lines.forEach((line, index) => {
         if (lastLines[index] === line) {
             return;
@@ -77,39 +77,11 @@ const shake = () => {
 
 const clear = () => outputEl.textContent = '';
 
-const exec = async (command) => {
-    const args = command.trim().split(' ');
-    const name = args[0];
-    const params = args.slice(1).filter(p => p !== '');
-
-    if (commands[name]) {
-        const style = cmdEl.style.display;
-        cmdEl.style.display = 'none';
-        $inputAllowed.value = false;
-
-        try {
-            await commands[name].exec({
-                print, clear, dangerouslyPrintHTML, optimisedDangerousLinePrint,
-                params, terminalEl, shake,
-            });
-        } catch (e) {
-            console.error(e);
-            print(`Process exited with error: ${e.message}`);
-        }
-
-        $inputAllowed.value = true;
-        cmdEl.style.display = style;
-    } else {
-        print(`Command not found: ${name}`);
-        print(`Type 'help' to list all available commands`)
-    }
-};
-
 const commands = {
     help: {
         description: 'List all available commands',
-        exec: ({ print }) => {
-            Object.keys(commands).forEach((command) => {
+        exec: ({ print }: ExecParams) => {
+            Object.keys(commands).filter(isCommandName).forEach((command) => {
                 const description = commands[command].description;
                 print(`${command} - ${description}`);
             });
@@ -121,7 +93,7 @@ const commands = {
     },
     history: {
         description: 'List all commands executed in this session',
-        exec: ({ print }) => {
+        exec: ({ print }: ExecParams) => {
             cliHistory.forEach((command) => {
                 print(command);
             });
@@ -130,6 +102,52 @@ const commands = {
     ...fs,
     ...email,
     ...koobas,
+};
+
+type CommandName = keyof typeof commands;
+
+function isCommandName(name: string): name is CommandName {
+    return name in commands;
+}
+
+export type ExecParams = {
+    print: typeof print;
+    clear: typeof clear;
+    dangerouslyPrintHTML: typeof dangerouslyPrintHTML;
+    optimisedDangerousLinePrint: typeof optimisedDangerousLinePrint;
+    params: string[];
+    terminalEl: HTMLElement;
+    shake: typeof shake;
+};
+
+const exec = async (inputString: string) => {
+    const args = inputString.trim().split(' ');
+    const name = args[0];
+    const params = args.slice(1).filter(p => p !== '');
+
+    if (isCommandName(name)) {
+        const style = cmdEl.style.display;
+        cmdEl.style.display = 'none';
+        $inputAllowed.value = false;
+
+        try {
+            await commands[name].exec({
+                print, clear, dangerouslyPrintHTML, optimisedDangerousLinePrint,
+                params, terminalEl, shake,
+            });
+        } catch (e) {
+            console.error(e);
+            if (typeof e === 'object' && e !== null && 'message' in e) {
+                print(`Process exited with error: ${e.message}`);
+            }
+        }
+
+        $inputAllowed.value = true;
+        cmdEl.style.display = style;
+    } else {
+        print(`Command not found: ${name}`);
+        print(`Type 'help' to list all available commands`)
+    }
 };
 
 terminalEl.addEventListener('keydown', async (e) => {

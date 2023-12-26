@@ -1,6 +1,6 @@
-import { createMonster, setPosition } from "/modules/games/koobas/entities.js"
-import { createLayer, setValueAt, getValueAt } from "/modules/games/koobas/layers.js"
-import { MOUNTAIN, WIDTH, HEIGHT, CAVE } from "/modules/games/koobas/enums.js"
+import { createMonster, setPosition, Position } from "/modules/games/koobas/entities"
+import { createLayer, setValueAt, getValueAt, Layer } from "/modules/games/koobas/layers"
+import { MOUNTAIN, WIDTH, HEIGHT, CAVE } from "/modules/games/koobas/enums"
 
 export function createCaveLayer() {
     const layer = createLayer(MOUNTAIN)
@@ -13,7 +13,7 @@ export function createCaveLayer() {
 
     let steps = 0
     let maxSteps = 1000
-    let prevDirection = null
+    let prevDirection: Position | null = null
     const straightness = Math.random()
 
     while (true) {
@@ -46,7 +46,7 @@ export function createCaveLayer() {
     return { layer, start: { x: startX, y: startY }, end: { x, y } }
 }
 
-export function removeSingleWalls(layer) {
+export function removeSingleWalls(layer: Layer) {
     let numRemoved = 0
 
     for (let x = 1; x < WIDTH - 1; x++) {
@@ -79,7 +79,7 @@ export const directions = [
     { x: 0, y: 1 }   // Down
 ]
 
-export function getRandomDirection(prevDirection, straightness = 0.5) {
+export function getRandomDirection(prevDirection: Position | null, straightness = 0.5) {
     if (prevDirection && Math.random() > straightness) {
         return prevDirection
     }
@@ -93,9 +93,9 @@ export function getRandomDirection(prevDirection, straightness = 0.5) {
     return availableDirections[Math.floor(Math.random() * availableDirections.length)]
 }
 
-const calculateDistance = (x1, y1, x2, y2) => Math.abs(x2 - x1) + Math.abs(y2 - y1);
+const calculateDistance = (x1: number, y1: number, x2: number, y2: number) => Math.abs(x2 - x1) + Math.abs(y2 - y1);
 
-export const createMonsters = function (caveLayerResult) {
+export const createMonsters = function (caveLayerResult: ReturnType<typeof createCaveLayer>, currentLevel = 1) {
     const MIN_DISTANCE = 5;
     const MIN_DISTANCE_TO_START = 10;
     const MAX_MONSTERS = 50;

@@ -1,3 +1,4 @@
+import { ExecParams } from "../terminal";
 import { $cwd, $currentMachine } from "/modules/state.js";
 
 function folder(files) {
@@ -7,7 +8,7 @@ function folder(files) {
     }
 }
 
-function file(content) {
+function file(content: string) {
     return {
         type: 'file',
         content: content,
@@ -206,13 +207,13 @@ export function getAutocompleteSuggestion(input) {
 export default {
     cwd: {
         description: 'Print the current working directory',
-        exec: ({ print }) => {
+        exec: ({ print }: ExecParams) => {
             print($cwd.value)
         }
     },
     ls: {
         description: 'List files and directories',
-        exec: ({ print }) => {
+        exec: ({ print }: ExecParams) => {
             const current = getByPath($cwd.value)
 
             if (!current) {
@@ -238,7 +239,7 @@ export default {
     },
     cd: {
         description: 'Change directory',
-        exec: ({ print, params }) => {
+        exec: ({ print, params }: ExecParams) => {
             const path = params[0]
 
             if (!path) {
@@ -255,7 +256,7 @@ export default {
     },
     cat: {
         description: 'Print file contents',
-        exec: ({ print, params }) => {
+        exec: ({ print, params }: ExecParams) => {
             const path = params[0]
 
             if (!path) {
@@ -264,9 +265,6 @@ export default {
             }
 
             const target = getByPath(path)
-
-            console.log('target', target)
-            console.log('path', path)
 
             if (!target) {
                 print('cat: ' + path + ': No such file or directory')
@@ -283,7 +281,7 @@ export default {
     },
     telnet: {
         description: 'Connect to a remote machine',
-        exec: ({ print, params }) => {
+        exec: ({ print, params }: ExecParams) => {
             const machine = params[0]
 
             if (!machine) {

@@ -1,5 +1,16 @@
-import { getValueAt } from "/modules/games/koobas/layers.js"
-import { CAVE, MOUNTAIN } from "/modules/games/koobas/enums.js"
+import { Layer, getValueAt } from "/modules/games/koobas/layers"
+import { CAVE, MOUNTAIN } from "/modules/games/koobas/enums"
+import { items, ItemName, isItemName } from "/modules/games/koobas/items"
+import { STYLE, Style } from "./graphics"
+
+export type Inventory = Record<ItemName, number>
+
+function INVENTORY(props : Partial<Inventory> = {}): Inventory {
+    // @ts-ignore
+    return Object.assign(Object.fromEntries(Object.keys(items).map((key) => {
+        return [key, 0]
+    })), props)
+}
 
 export const createPlayer = function() {
     return {
@@ -9,12 +20,11 @@ export const createPlayer = function() {
         damage: 1,
         luck: 0.20,
         visibility: 8,
-        inventory: {
-            gold: 0,
-            apples: 0,
-        },
+        inventory: INVENTORY(),
+        style: STYLE('☺', '#ff0'),
     }
 }
+export type Player = ReturnType<typeof createPlayer>
 
 export const createMonster = function() {
     return {
@@ -23,23 +33,31 @@ export const createMonster = function() {
         maxHealth: 3,
         damage: 1,
         visibility: 7,
-        inventory: {
-            gold: 1 + Math.floor(Math.random() * 4),
-            apples: Math.floor(Math.random() * 3),
-        },
+        inventory: INVENTORY({
+            'gold-coin': 1 + Math.floor(Math.random() * 4),
+            'apple': Math.floor(Math.random() * 3),
+        }),
+        style: STYLE('Ψ', '#f00'),
     }
 }
+export type Monster = ReturnType<typeof createMonster>
+export type Entity = Player | Monster
 
-export const setPosition = function(entity, position) {
+export type Position = {
+    x: number,
+    y: number,
+}
+
+export const setPosition = function(entity: Entity, position: Position) {
     entity.position.x = position.x
     entity.position.y = position.y
 }
 
-export const attemptMove = function(caveLayer, anyEntity, direction) {
+export const attemptMove = function(caveLayer: Layer, anyEntity: Entity, direction: Position) {
     const newX = anyEntity.position.x + direction.x
     const newY = anyEntity.position.y + direction.y
 
-    const value = getValueAt(caveLayer.layer, newX, newY)
+    const value = getValueAt(caveLayer, newX, newY)
 
     if (value !== CAVE) {
         return false
@@ -50,7 +68,7 @@ export const attemptMove = function(caveLayer, anyEntity, direction) {
     return true
 }
 
-export const attemptAttack = function(targets, attacker, direction) {
+export const attemptAttack = function(targets: Entity[], attacker: Entity, direction: Position) {
     const newX = attacker.position.x + direction.x
     const newY = attacker.position.y + direction.y
 
@@ -61,13 +79,18 @@ export const attemptAttack = function(targets, attacker, direction) {
             if (target.health <= 0) {
                 target.health = 0
 
+                console.log('killed', target)
+                console.log('inventory', target.inventory)
+
                 // Transfer inventory
                 Object.entries(target.inventory).forEach(([key, amount]) => {
-                    if (attacker.inventory[key] === undefined) {
-                        attacker.inventory[key] = 0
+                    if (isItemName(key)) {
+                        if (attacker.inventory[key] === undefined) {
+                            attacker.inventory[key] = 0
+                        }
+    
+                        attacker.inventory[key] += amount
                     }
-
-                    attacker.inventory[key] += amount
                 })
             }
 
@@ -78,7 +101,7 @@ export const attemptAttack = function(targets, attacker, direction) {
     return false
 }
 
-export const canEntitySeeTarget = function(entity, target, caveLayer) {
+export const canEntitySeeTarget = function(entity: Entity, target: Entity, caveLayer: Layer) {
     const distance = Math.sqrt(
         Math.pow(target.position.x - entity.position.x, 2) +
         Math.pow(target.position.y - entity.position.y, 2)
@@ -108,7 +131,7 @@ export const canEntitySeeTarget = function(entity, target, caveLayer) {
     return true
 }
 
-export const getDirectionFromTowards = function(anyEntity, target) {
+export const getDirectionFromTowards = function(anyEntity: Entity, target: Entity) {
     const deltaX = target.position.x - anyEntity.position.x
     const deltaY = target.position.y - anyEntity.position.y
     const angle = Math.atan2(deltaY, deltaX)
@@ -120,7 +143,7 @@ export const getDirectionFromTowards = function(anyEntity, target) {
 }
 
 // Same as above, but can only move Up, Down, Left, or Right
-export const getAdjacentDirectionFromTowards = function(anyEntity, target) {
+export const getAdjacentDirectionFromTowards = function(anyEntity: Entity, target: Entity) {
     const deltaX = target.position.x - anyEntity.position.x
     const deltaY = target.position.y - anyEntity.position.y
 

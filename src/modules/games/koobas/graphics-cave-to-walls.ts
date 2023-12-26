@@ -1,5 +1,5 @@
-import { CAVE, MOUNTAIN, TRANSPARENT, WIDTH, HEIGHT } from "/modules/games/koobas/enums.js"
-import { getValueAt, setValueAt, createLayer } from "/modules/games/koobas/layers.js"
+import { CAVE, MOUNTAIN, TRANSPARENT, WIDTH, HEIGHT } from "/modules/games/koobas/enums"
+import { getValueAt, setValueAt, createLayer, Layer } from "/modules/games/koobas/layers"
 
 const defaultWallSymbol = '▫'
 const M = MOUNTAIN
@@ -60,7 +60,7 @@ const caveToSymbol = Object.fromEntries(
         .map(([symbol, pattern]) => [pattern.join(''), symbol])
 )
 
-export function caveToWalls(caveLayer) {
+export function caveToWalls(caveLayer: Layer) {
     const wallLayer = createLayer(TRANSPARENT)
 
     // Loop over the cave layer and check if the symbol should be replaced

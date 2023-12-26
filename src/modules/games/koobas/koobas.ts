@@ -1,21 +1,22 @@
-import { illuminate, renderLayersAsLines, graphics } from '/modules/games/koobas/graphics.js'
-import { attemptAttack, attemptMove, setPosition, createPlayer, canEntitySeeTarget, getAdjacentDirectionFromTowards } from '/modules/games/koobas/entities.js'
-import { createLayer, setValueAt } from '/modules/games/koobas/layers.js'
-import { createCaveLayer, createMonsters } from '/modules/games/koobas/procedural.js'
-import { replaceDeepWallsWithPathTiles } from '/modules/games/koobas/procedural-cleanup.js'
-import { END, START, PLAYER, APPLE, MONSTER, GOLD, SHOP, FOG } from '/modules/games/koobas/enums.js'
-import { caveToWalls } from '/modules/games/koobas/graphics-cave-to-walls.js'
-import { loadAllSounds, playAudio } from './audio-player/audio-player.js'
+import { illuminate, renderLayersAsLines, graphics, getGraphic, GraphicName, STYLE } from '/modules/games/koobas/graphics'
+import { attemptAttack, attemptMove, setPosition, createPlayer, canEntitySeeTarget, getAdjacentDirectionFromTowards, Player, Entity } from '/modules/games/koobas/entities'
+import { createLayer, setValueAt } from '/modules/games/koobas/layers'
+import { createCaveLayer, createMonsters } from '/modules/games/koobas/procedural'
+import { replaceDeepWallsWithPathTiles } from '/modules/games/koobas/procedural-cleanup'
+import { END, START, PLAYER, APPLE, MONSTER, GOLD, SHOP, FOG } from '/modules/games/koobas/enums'
+import { caveToWalls } from '/modules/games/koobas/graphics-cave-to-walls'
+import { loadAllSounds, playAudio } from './audio-player/audio-player'
+import { ExecParams } from '/modules/terminal'
 
-function getPlayerStats(player) {
+function getPlayerStats(player: Player) {
     return [
         `Health ${player.health}`,
-        `Apples ${player.inventory.apples}`,
-        `Gold ${player.inventory.gold}`,
+        `Apples ${player.inventory.apple}`,
+        `Gold ${player.inventory['gold-coin']}`,
     ].join('  ')
 }
 
-const legend = Object.entries({
+const legendMap: Partial<Record<GraphicName, string>> = {
     [END]: 'Exit',
     [START]: 'Entrance',
     [PLAYER]: 'You',
@@ -23,15 +24,20 @@ const legend = Object.entries({
     [MONSTER]: 'Monster',
     [GOLD]: 'Gold',
     [SHOP]: 'Shop',
-}).map(([value, label]) => `${graphics[value].glyph} ${label}`).join('  ')
+}
 
-let player = null
+const legend = Object.entries(legendMap).map(([value, label]) => `${getGraphic(value).glyph} ${label}`).join('  ')
+
+let player: Player = createPlayer()
 let currentLevel = 0
 
-function startNewLevel({ print, optimisedDangerousLinePrint, terminalEl, shake, resolve, reject }) {
-    if (!player) {
-        player = createPlayer()
-    }
+type AsyncExecParams = ExecParams & {
+    resolve: (value?: unknown) => void,
+    reject: () => void,
+}
+
+function startNewLevel(asyncExecParams: AsyncExecParams) {
+    const { print, optimisedDangerousLinePrint, terminalEl, shake, resolve, reject } = asyncExecParams
 
     const caveLayerResult = createCaveLayer()
     const staticItemsLayer = createLayer()
@@ -48,6 +54,10 @@ function startNewLevel({ print, optimisedDangerousLinePrint, terminalEl, shake, 
     const fogLayer = createLayer(FOG)
     
     function render() {
+        if (player === null) {
+            throw new Error('Player is null')
+        } 
+
         illuminate(fogLayer, caveLayerResult.layer, player.position, player.visibility)
 
         const visibilityLayer = createLayer(FOG)
@@ -76,27 +86,27 @@ function startNewLevel({ print, optimisedDangerousLinePrint, terminalEl, shake, 
     }
 
     function handlePlayerDeath() {
-        player = null
+        player = createPlayer()
         currentLevel = 0
         playAudio('player-death')
         cleanup()
-        startNewLevel({ print, optimisedDangerousLinePrint, terminalEl, shake, resolve, reject })
+        startNewLevel(asyncExecParams)
     }
 
     function ascend() {
         currentLevel += 1
         playAudio('ascend')
         cleanup()
-        startNewLevel({ print, optimisedDangerousLinePrint, terminalEl, shake, resolve, reject })
+        startNewLevel(asyncExecParams)
     }
 
-    function eatApple(entity) {
+    function eatApple(entity: Entity) {
         entity.health = Math.min(entity.health + 3, entity.maxHealth)
-        entity.inventory.apples -= 1
+        entity.inventory.apple -= 1
         playAudio('apple-bite-1')
     }
 
-    function handleKeyDownEvent(e) {
+    function handleKeyDownEvent(e: KeyboardEvent) {
         if (e.key === 'c' && e.ctrlKey) {
             e.preventDefault()
             print('^C')
@@ -121,7 +131,7 @@ function startNewLevel({ print, optimisedDangerousLinePrint, terminalEl, shake, 
             e.preventDefault()
 
             // Eat apple
-            if (player.inventory.apples > 0) {
+            if (player.inventory.apple > 0) {
                 actionTaken = true
                 eatApple(player)
             }
@@ -134,7 +144,7 @@ function startNewLevel({ print, optimisedDangerousLinePrint, terminalEl, shake, 
             const attackedMonster = attemptAttack(monsters, player, direction)
 
             if (!attackedMonster) {
-                attemptMove(caveLayerResult, player, direction)
+                attemptMove(caveLayerResult.layer, player, direction)
                 playAudio('step')
             } else {
                 playAudio('punch1')
@@ -154,15 +164,15 @@ function startNewLevel({ print, optimisedDangerousLinePrint, terminalEl, shake, 
         if (actionTaken) {
             for (const monster of monsters) {
                 if (canEntitySeeTarget(monster, player, caveLayerResult.layer)) {
-                    monster.style = { glyph: graphics[MONSTER].glyph, color: '#ff0000' }
+                    monster.style = STYLE(graphics[MONSTER].glyph, '#ff0000')
                     const direction = getAdjacentDirectionFromTowards(monster, player)
                     const monsterAttackedPlayer = attemptAttack([player], monster, direction)
 
                     if (!monsterAttackedPlayer) {
-                        attemptMove(caveLayerResult, monster, direction)
+                        attemptMove(caveLayerResult.layer, monster, direction)
                     }
                 } else {
-                    monster.style = { glyph: graphics[MONSTER].glyph, color: '#aa0000' }
+                    monster.style = STYLE(graphics[MONSTER].glyph, '#aa0000')
                 }
             }
 
@@ -191,15 +201,16 @@ function startNewLevel({ print, optimisedDangerousLinePrint, terminalEl, shake, 
     render()
 }
 
-export function main({ print, optimisedDangerousLinePrint, terminalEl, shake, clear }) {
+export function main(execParams: ExecParams) {
     return new Promise(async (resolve, reject) => {
+        const { print, clear } = execParams
         print('Loading...')
         clear()
         await loadAllSounds()
 
-        player = null
+        player = createPlayer()
         currentLevel = 0
 
-        startNewLevel({ print, optimisedDangerousLinePrint, terminalEl, shake, resolve, reject })
+        startNewLevel({ ...execParams, resolve, reject })
     })
 }
