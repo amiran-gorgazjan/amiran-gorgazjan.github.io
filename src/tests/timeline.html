@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertical Timeline with Tailwind CSS</title>
+    <!-- Ensure you include Tailwind CSS here -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+
+<div class="container mx-auto w-full h-full">
+    <div class="relative wrap overflow-hidden p-10 h-full">
+        <!-- Vertical timeline line -->
+        <div class="border-2-2 absolute border-opacity-20 border-gray-700 h-full border" style="left: 50%"></div>
+
+        <!-- Right side timeline items -->
+        <!-- Timeline item 1 -->
+        <div class="mb-8 flex justify-between items-center w-full right-timeline">
+            <div class="order-1 w-5/12"></div>
+            <div class="z-20 flex items-center order-1 bg-gray-800 shadow-xl w-8 h-8 rounded-full">
+                <h1 class="mx-auto text-white font-semibold text-lg">1</h1>
+            </div>
+            <div class="order-1 bg-blue-400 rounded-lg shadow-xl w-5/12 px-6 py-4">
+                <h3 class="mb-3 font-bold text-white text-xl">Event Title</h3>
+                <p class="text-sm leading-snug tracking-wide text-white text-opacity-100">Description for the event here. This is the text for the timeline event's details.</p>
+            </div>
+        </div>
+
+        <!-- Left side timeline items -->
+        <!-- Timeline item 2 -->
+        <div class="mb-8 flex justify-between flex-row-reverse items-center w-full left-timeline">
+            <div class="order-1 w-5/12"></div>
+            <div class="z-20 flex items-center order-1 bg-gray-800 shadow-xl w-8 h-8 rounded-full">
+                <h1 class="mx-auto text-white font-semibold text-lg">2</h1>
+            </div>
+            <div class="order-1 bg-red-400 rounded-lg shadow-xl w-5/12 px-6 py-4">
+                <h3 class="mb-3 font-bold text-white text-xl">Event Title</h3>
+                <p class="text-sm leading-snug tracking-wide text-white text-opacity-100">Here is another piece of information about an event that took place at this point on the timeline.</p>
+            </div>
+        </div>
+
+        <!-- Add as many timeline items as needed by duplicating the structure -->
+        <!-- Make sure to alternate between 'right-timeline' and 'left-timeline' classes -->
+
+    </div>
+</div>
+
+</body>
+</html>

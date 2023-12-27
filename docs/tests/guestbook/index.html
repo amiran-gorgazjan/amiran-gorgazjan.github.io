@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Geocities Guestbook</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0e68c;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        .marquee {
+            background-color: #ff69b4;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        .guestbook-container {
+            background-color: #ffffff;
+            border: 3px dashed #0000ff;
+            padding: 20px;
+            margin: 20px auto;
+            width: 80%;
+        }
+        .guestbook-form input, .guestbook-form textarea {
+            border: 1px solid #000000;
+            background-color: #ffffe0;
+        }
+        .submit-button {
+            background-color: #008000;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+        }
+        .messages-container {
+            background-color: #d8bfd8; /* A lavender background */
+            border: 2px dotted red;
+            padding: 10px;
+            width: 60%;
+            margin: 20px auto;
+        }
+        .message {
+            border-bottom: 1px dashed #000000;
+            padding: 10px;
+            font-size: 14px;
+        }
+        .message:last-child {
+            border-bottom: none;
+        }
+        .message-author {
+            font-weight: bold;
+            color: #000080; /* Navy blue text */
+        }
+    </style>
+</head>
+<body>
+    <div class="marquee">
+        <marquee>Welcome to my Guestbook! Welcome (I am from Estonia)</marquee>
+    </div>
+    <div class="guestbook-container">
+        <h2 class="text-2xl text-center mb-4">Please Sign My Guestbook</h2>
+        <img src="/images/guestbook/estonia.gif" alt="Estonia flag" class="mx-auto mb-4" />
+        <p class="text-center">I am from Estonia!!!</p>
+        <form class="guestbook-form">
+            <div class="mb-4">
+                <label for="name" class="block text-sm font-bold mb-2">Name:</label>
+                <input type="text" id="name" class="w-full p-2">
+            </div>
+            <div class="mb-4">
+                <label for="message" class="block text-sm font-bold mb-2">Messenge:</label>
+                <textarea id="message" class="w-full p-2" rows="4"></textarea>
+            </div>
+            <button type="submit" class="submit-button">Submit</button>
+        </form>
+    </div>
+    <div class="messages-container">
+        <h3 class="text-xl mb-2">Messages:</h3>
+        <!-- Example messages -->
+        <div class="message">
+            <span class="message-author">Alice:</span> Love your website! So retro!
+        </div>
+        <div class="message">
+            <span class="message-author">Bob:</span> This brings back memories!
+        </div>
+        <div class="message">
+            <span class="message-author">Charlie:</span> Amazing guestbook!
+        </div>
+    </div>
+</body>
+</html>

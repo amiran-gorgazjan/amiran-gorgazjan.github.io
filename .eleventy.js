@@ -9,6 +9,7 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.addWatchTarget("./src/");
     eleventyConfig.addPassthroughCopy("src/styles");
     eleventyConfig.addPassthroughCopy("src/images");
+    eleventyConfig.addPassthroughCopy("src/tests");
     eleventyConfig.addPassthroughCopy("src/modules/**/*.{wav,mp3,ogg}");
     // eleventyConfig.addPassthroughCopy("build");
     eleventyConfig.addPlugin(syntaxHighlight);

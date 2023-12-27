@@ -132,8 +132,8 @@ export function renderLayersAsLines(layers: Layer[] = [], visibilityLayer: Layer
 
             const visibility = visibilityLayer ? getValueAt(visibilityLayer, x, y) : TRANSPARENT
             const style = {
-                opacity: visibility === FOG ? 0.2 : 1,
                 ...styleOnLayer,
+                opacity: visibility === FOG ? 0.2 : 1,
             }
 
             if (!style) {
