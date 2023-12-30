@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ECOSYSTEM SIM</title>
+    <style>
+        body {
+            background: #222;
+            color: #ccc;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: 100;
+            font-size: 14px;
+        }
+
+        .main-canvas {
+            width: 100%;
+            height: auto;
+            /* image-rendering: pixelated; */
+            background: #000000;
+            display: block;
+        }
+
+        #debug p {
+            font-family: monospace;
+            margin: 0;
+        }
+
+        .visuals {
+            background: #111;
+            position: relative;
+        }
+
+        .first-visual {
+            image-rendering: pixelated;
+            width: 100%;
+            height: auto;
+        }
+
+        .visual {
+            position: absolute;
+            top: 0;
+            left: 0;
+            image-rendering: pixelated;
+            width: 100%;
+            height: auto;
+        }
+
+        .wrapper {
+            max-width: 1920px;
+            margin: 0 auto;
+        }
+
+        .meta {
+            padding-top: 32px;
+        }
+
+        .settings {
+            display: grid;
+            grid-template-columns: repeat(5, auto);
+            grid-gap: 32px 32px;
+        }
+
+        .settings__title {
+            margin: 0 0 16px 0;
+            color: #eee;
+        }
+
+        .boolean {
+            margin-bottom: 16px;
+        }
+
+        .range {
+            display: grid;
+            grid-template-columns: 70% 30%;
+            margin-bottom: 16px;
+        }
+
+        .range__slider {
+            width: 100%;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <canvas class="main-canvas" id="canvas" width="300" height="150"></canvas>
+        <div class="meta">
+            <div class="settings">
+                <div id="rendering"></div>
+                <div id="vegetation"></div>
+                <div id="darwinism"></div>
+                <div id="rabbits"></div>
+                <div id="foxes"></div>
+            </div>
+
+            <div class="stats">
+                <div class="visuals">
+                    <canvas class="first-visual" id="rabbits-population" width="800" height="300"></canvas>
+                    <canvas class="visual" id="wolves-population" width="800" height="300"></canvas>
+                    <canvas class="visual" id="rabbits-histogram" width="800" height="300"></canvas>
+                    <canvas class="visual" id="wolves-histogram" width="800" height="300"></canvas>
+                </div>
+                <div class="visual-controls">
+                    <p><label><input type="checkbox" /> Rabbits histogram</label></p>
+                    <p><label><input type="checkbox" /> Foxes histogram</label></p>
+                    <p><label><input type="checkbox" /> Rabbits population</label></p>
+                    <p><label><input type="checkbox" /> Foxes population</label></p>
+                </div>
+                <div id="debug"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="src/config.js"></script>
+    <script src="src/utils.js"></script>
+    <script src="src/settings.js"></script>
+    <script src="src/Observable.js"></script>
+    <script src="src/SettingsControls.js"></script>
+    <script src="src/CanvasControls.js"></script>
+    <script src="src/create2dArray.js"></script>
+    <script src="src/addCreature.js"></script>
+    <script src="src/Creature.js"></script>
+    <script src="src/updateCreatures.js"></script>
+    <script src="src/updateGrass.js"></script>
+    <script src="src/renderField.js"></script>
+    <script src="src/renderCreatures.js"></script>
+    <script src="src/stats.js"></script>
+    <script src="src/statsRenderer.js"></script>
+    <script src="src/app.js"></script>
+</body>
+</html>

@@ -31,7 +31,7 @@ At it's height it has something like 100 unique users per day, but it was eventu
 
 ## Predator-prey simulation
 
-[Predator-prey simulation](https://github.com/kvintessents/predator-prey) is a cellular automata simulation of a predator-prey ecosystem. It uses a genetic algorithm to evolve the predators and the prey.
+[Predator-prey simulation](/sideprojects/predator-prey/) is a cellular automata simulation of a predator-prey ecosystem. It uses a genetic algorithm to evolve the predators and the prey.
 
 It showcases multiple interesting concepts found in nature, such as:
 * Evolution

@@ -11,6 +11,12 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.addPassthroughCopy("src/images");
     eleventyConfig.addPassthroughCopy("src/tests");
     eleventyConfig.addPassthroughCopy("src/modules/**/*.{wav,mp3,ogg}");
+    eleventyConfig.addPassthroughCopy({
+        './sideprojects/molecular-dynamics-js/public/': 'sideprojects/molecular-dynamics-js',
+    });
+    eleventyConfig.addPassthroughCopy({
+        './sideprojects/predator-prey': 'sideprojects/predator-prey',
+    });
     // eleventyConfig.addPassthroughCopy("build");
     eleventyConfig.addPlugin(syntaxHighlight);
 
