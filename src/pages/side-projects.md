@@ -31,15 +31,13 @@ At it's height it has something like 100 unique users per day, but it was eventu
 
 ## Predator-prey simulation
 
-[Predator-prey simulation](/sideprojects/predator-prey/) is a cellular automata simulation of a predator-prey ecosystem. It uses a genetic algorithm to evolve the predators and the prey.
-
-It showcases multiple interesting concepts found in nature, such as:
-* Evolution
-* Natural selection
-* Oscillation of predator and prey populations
-* Speciation
+[Predator-prey simulation](/sideprojects/predator-prey/) is a cellular automata simulation of a predator-prey ecosystem. It uses a genetic algorithm to evolve the predators and the prey. The creatures eat, hunt, reproduce asexualy, mutate randomly, and showcase multiple interesting concepts found in nature, such as evolution, natural selection, oscillation of predator and prey populations and speciation.
 
 It uses web-workers to solve the cellular automata grid in parallel for improved performance.
+
+## Molecular Dynamics Simulation
+
+[Molecular Dynamics Simulation](/sideprojects/molecular-dynamics-js/) is a simulation of a molecular dynamics system. It uses the [Euler method](https://en.wikipedia.org/wiki/Euler_method) to solve the equations of motion for each particle.
 
 ## Worlde Solver
 
