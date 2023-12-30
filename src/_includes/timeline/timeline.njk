@@ -1,0 +1,193 @@
+{% from "timeline/period.njk" import periodLeft, periodRight with context %}
+
+{% macro timeline() %}
+<style>
+    .cv-container {
+        display: grid;
+        grid-template-columns: 45% 10% 45%;
+        width: 100%;
+        padding-bottom: 4rem;
+    }
+
+    .cv-bubble {
+        background-color: #fff;
+        border-radius: 1rem 1rem 1rem 1rem;
+        padding: 1rem 1rem;
+        position: relative;
+    }
+
+    .cv-bubble--blue {
+        background-color: #046dc4;
+    }
+    .cv-bubble--green {
+        background-color: #48bb78;
+    }
+    .cv-bubble--violet {
+        background-color: #b80748;
+    }
+
+    .cv-bubble--left {
+        border-top-right-radius: 0;
+        transform: rotate(2deg);
+    }
+    .cv-bubble--right {
+        border-top-left-radius: 0;
+        transform: rotate(-2deg);
+    }
+
+    .cv-bubble h2 {
+        margin: 0;
+        font-family: 'Iowan Old Style', 'Palatino Linotype', 'URW Palladio L', P052, serif;
+        line-height: 2rem;
+        font-size: 2rem;
+        text-align: center;
+    }
+    .cv-bubble h3 {
+        margin: 0.8rem 0 0 0;
+        font-size: 1.2rem;
+        font-weight: 100;
+        text-align: center;
+    }
+    .cv-bubble p {
+        margin: 1rem 0 0;
+        font-size: 1rem;
+        line-height: 1.5rem;
+        font-weight: 300;
+    }
+    .cv-tech {
+        margin: 1rem 0 0 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+    }
+    .cv-tech li {
+        display: block;
+        margin: 0;
+        padding: 0 0.5rem;
+        border-radius: 0.3rem;
+        font-size: 0.8rem;
+        font-weight: 300;
+        cursor: default;
+    }
+    .cv-bubble--blue .cv-tech li {
+        background-color: #003883;
+    }
+    .cv-bubble--violet .cv-tech li {
+        background-color: #6f0d2d;
+    }
+    .cv-timeline-point {
+        position: relative;
+        width: 2rem;
+        height: 100%;
+        background-color: #fff;
+        margin: 0 auto;
+    }
+    .cv-timeline-point--start {
+        border-radius: 1rem 1rem 0 0;
+    }
+    .cv-timeline-point--blue {
+        background-color: #046dc4;
+    }
+    .cv-timeline-point--violet {
+        background-color: #b80748;
+    }
+</style>
+
+<div class="cv-container">{{
+    periodLeft(
+        'Deepinsight',
+        'Tech Lead',
+        "
+            Deepinsight started as an AI consulting company in the health sector.
+            I joined them as a front end developer, but I was quickly promoted to
+            tech lead where I was responsible for the architecture of the front
+            end and the back end and establishing the development processes,
+            including Agile principles and CI/CD.
+        ",
+        [
+            "TypeScript", "React", "Redux", "Zustand",
+            "Next.js", "Puppeteer", "OpenAPI", "FHIR",
+            "PostgresQL", "Docker", "Kubernetes", "Conda",
+            "Poetry", "Python", "FastAPI", "Team Management"
+        ],
+        "275px"
+    )
+}}{{
+    periodRight(
+        "Block / Tidal",
+        "Tech Lead", "
+            Tidal is company that aims to revolutionize the music industry by giving artists
+            more control over their music and how it is distributed. I joined them as a full
+            stack engineer where I was responsible for the Sign Up and Sign In flows, the
+            Payment flow and promotional campaigns. Tidal was acquired by Block in 2021.
+        ", [
+            "TypeScript", "Vue.js", "Nuxt", "Node",
+            "OpenAPI", "Express", "DynamoDB", "Docker"
+        ],
+        "434px"
+    )
+}}{{
+    periodLeft("Pipedrive", "Tech Lead", "
+        Pipedrive is a CRM company that helps sales teams manage their sales pipeline.
+        I joined them as a full stack engineer where I was responsible for the
+        the billing flow, the complete rebuild of the search engine and settings.
+    ", [
+        "JavaScript", "TypeScript", "Node", "React",
+        "Redux", "Jasmine", "OpenAPI", "Kafka",
+        "ElasticSearch", "MySQL", "Docker", "AWS S3",
+        "RabbitMQ", "Team Management"
+    ],
+    "591px"
+    )
+}}{{
+    periodRight(
+        "ZeroTurnaround",
+        "Senior JavaScript Developer",
+        "
+            ZeroTurnaround is a company that builds tools for Java developers.
+            I joined them as a front end developer where I was responsible for the
+            complete rebuild of the front end of the XRebel product.
+        ",
+        [ "AngluarJS", "jQuery", "React" ],
+        "197px"
+    )
+}}{{
+    periodLeft(
+        "The Estonian Environment Agency",
+        "Full Stack Developer / Product Owner",
+        "
+            The Estonian Environment Agency is a government agency that is responsible for
+            monitoring the environment and providing environmental information.
+            I joined them as a full stack engineer where I was responsible for the
+            complete rebuild of their webside ilmateenistus.ee.
+        ",
+        [ "Wordpress", "PHP", "JavaScript", "jQuery" ],
+        "301px"
+    )
+}}{{
+    periodRight(
+        "Kooliksvalmis Project",
+        "Full Stack Developer / Team Lead",
+        "
+            I worked together with the company Povi to build a fun and
+            educational web game portal aimed at preschool children called
+            kooliksvalmis.ee. I mentored a team of 3 developers and was
+            responsible for the core architecture.
+        ",
+        [
+            "JavaScript", "jQuery", "Game Development", "MelonJS",
+            "PHP", "Drupal", "React"
+        ],
+        "100px"
+        )
+}}{{
+    periodLeft("Vigvam", "Senior Full Stack Engineer", "
+        Vigvam was a web agency that built websites for small and medium sized companies.
+    ", [
+        "Wordpress", "PHP", "JavaScript", "jQuery"
+    ], "215px")
+}}
+
+{% endmacro %}

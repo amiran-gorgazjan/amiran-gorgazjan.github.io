@@ -13,4 +13,8 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.addPassthroughCopy("src/modules/**/*.{wav,mp3,ogg}");
     // eleventyConfig.addPassthroughCopy("build");
     eleventyConfig.addPlugin(syntaxHighlight);
+
+    return {
+        markdownTemplateEngine: "njk",
+    }
 };

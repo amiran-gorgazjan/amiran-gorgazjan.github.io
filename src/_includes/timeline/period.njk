@@ -1,0 +1,31 @@
+{% from "timeline/tech-pills.njk" import techPills with context %}
+
+{% macro periodLeft(header, jobTitle, description, tech = [], height = 'auto') %}
+<div class="cv-left" style="height: {{ height }}">
+    <div class="cv-bubble cv-bubble--left cv-bubble--blue">
+        <h2>{{ header }}</h2>
+        <h3>{{ jobTitle }}</h3>
+        <p>{{ description }}</p>
+        {{ techPills(tech) }}
+    </div>
+</div>
+<div class="timeline" style="height: {{ height }}">
+    <div class="cv-timeline-point cv-timeline-point--blue">2022</div>
+</div>
+<div class="cv-right" style="height: {{ height }}"></div>
+{% endmacro %}
+
+{% macro periodRight(header, jobTitle, description, tech = [], height = 'auto') %}
+<div style="height: {{ height }}"></div>
+<div style="height: {{ height }}">
+    <div class="cv-timeline-point cv-timeline-point--violet">2019</div>
+</div>
+<div style="height: {{ height }}">
+    <div class="cv-bubble cv-bubble--right cv-bubble--violet">
+        <h2>{{ header }}</h2>
+        <h3>{{ jobTitle }}</h3>
+        <p>{{ description }}</p>
+        {{ techPills(tech) }}
+    </div>
+</div>
+{% endmacro %}
