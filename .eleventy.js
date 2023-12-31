@@ -5,6 +5,7 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.on('eleventy.before', async ({ dir, runMode, outputMode }) => {
         await exec('bun run build-terminal', { stdio: 'inherit' });
         await exec('bun run build-molecular-dynamics', { stdio: 'inherit' });
+        await exec('bun run build-molecular-dynamics-worker', { stdio: 'inherit' });
     });
 
     eleventyConfig.addWatchTarget("./src/");

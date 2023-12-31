@@ -5,7 +5,8 @@
     "build": "npx @11ty/eleventy --input=./src --output=docs/",
     "dev": "npx @11ty/eleventy --input=./src --output=docs/ --serve",
     "build-terminal": "bun build ./src/modules/terminal.ts --outdir ./docs/build --minify",
-    "build-molecular-dynamics": "bun build ./src/sideprojects/molecular-dynamics/molecular-dynamics.ts --outdir ./docs/sideprojects/molecular-dynamics"
+    "build-molecular-dynamics": "bun build ./src/sideprojects/molecular-dynamics/molecular-dynamics.ts --outdir ./docs/sideprojects/molecular-dynamics",
+    "build-molecular-dynamics-worker": "bun build ./src/sideprojects/molecular-dynamics/worker.ts --outdir ./docs/sideprojects/molecular-dynamics"
   },
   "devDependencies": {
     "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.0",
