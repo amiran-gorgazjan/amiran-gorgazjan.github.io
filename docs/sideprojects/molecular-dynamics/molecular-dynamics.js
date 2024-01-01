@@ -78,11 +78,12 @@ var draw = function(ctx, width, height) {
   ctx.font = "12px Arial";
   ctx.fillStyle = "#000000";
   ctx.fillText(`Temperature: ${temperature}`, 10, height - 10);
-  ctx.fillText(`Elapsed time: ${elapsedTime}`, 10, height - 30);
+  ctx.fillText(`Elapsed time: ${elapsedTime}`, 10, height - 25);
   const now = Date.now();
   const dt = now - lastTimestamp;
   lastTimestamp = now;
-  ctx.fillText(`Frame time: ${dt} ms`, 10, height - 50);
+  ctx.fillText(`Frame time: ${dt} ms`, 10, height - 40);
+  ctx.fillText(`Number of worker threads: ${numWorkers}`, 10, height - 55);
   frameCounter++;
 };
 var postMessages = function() {
@@ -111,7 +112,6 @@ var main = function() {
     }
     elapsedTime += dt;
     draw(ctx, width, height);
-    postMessages();
   }
   workerConfigs.forEach((workerConfig) => {
     workerConfig.worker.onmessage = (e) => {
@@ -123,7 +123,12 @@ var main = function() {
       }
       workerConfig.busy = false;
       if (workerConfigs.every((w) => !w.busy)) {
-        update();
+        numFullUpdates++;
+        if (numFullUpdates % 10 === 0) {
+          numFullUpdates = 0;
+          update();
+        }
+        postMessages();
       }
     };
   });
@@ -156,9 +161,9 @@ var main = function() {
     }
   });
 };
-var particles = 200;
+var particles = 400;
 var atoms = new Float64Array(particles * numProps);
-var numWorkers = window.navigator.hardwareConcurrency;
+var numWorkers = window.navigator.hardwareConcurrency * 2 + 1;
 var atomsPerWorker = Math.ceil(particles / numWorkers);
 var workerConfigs = Array.from({ length: numWorkers }).map((_, i) => {
   const worker = new Worker("./worker.js");
@@ -181,4 +186,5 @@ var frameCounter = 0;
 var dtPerFrame = 0.001;
 var framesPerTemperatureUpdate = 10;
 var dt = dtPerFrame;
+var numFullUpdates = 0;
 main();

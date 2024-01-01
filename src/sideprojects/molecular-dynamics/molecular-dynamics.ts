@@ -7,11 +7,11 @@
 import { X, Y, VX, VY, AX, AY, SIGMA, EPSILON, MASS, numProps } from "./constants";
 import { calculateTemperature } from "./utils";
 
-const particles = 200;
+const particles = 400;
 
 const atoms = new Float64Array(particles * numProps);
 // const atoms : number[] = [];
-const numWorkers = window.navigator.hardwareConcurrency;
+const numWorkers = window.navigator.hardwareConcurrency * 2 + 1
 
 // Precalculate the indices of the atoms that each worker will be responsible for
 const atomsPerWorker = Math.ceil(particles / numWorkers);
@@ -118,20 +118,22 @@ function draw(ctx : CanvasRenderingContext2D, width: number, height: number) {
     ctx.fillStyle = "#000000";
     ctx.fillText(`Temperature: ${temperature}`, 10, height - 10);
     // Elapsed time
-    ctx.fillText(`Elapsed time: ${elapsedTime}`, 10, height - 30);
+    ctx.fillText(`Elapsed time: ${elapsedTime}`, 10, height - 25);
     // Average time between frames
     const now = Date.now();
     const dt = now - lastTimestamp;
     lastTimestamp = now;
-    ctx.fillText(`Frame time: ${dt} ms`, 10, height - 50);
+    ctx.fillText(`Frame time: ${dt} ms`, 10, height - 40);
+    // number of cores
+    ctx.fillText(`Number of worker threads: ${numWorkers}`, 10, height - 55);
 
     frameCounter++;
 }
 
 const dtPerFrame = 0.001;
 const framesPerTemperatureUpdate = 10;
-
 const dt = dtPerFrame;
+let numFullUpdates = 0;
 
 function postMessages() {
     workerConfigs.forEach((workerConfig) => {
@@ -164,7 +166,6 @@ function main() {
         elapsedTime += dt;
 
         draw(ctx!, width, height);
-        postMessages();
     }
 
     workerConfigs.forEach((workerConfig) => {
@@ -181,7 +182,13 @@ function main() {
     
             // If all workers are done
             if (workerConfigs.every(w => !w.busy)) {
-                update()
+                numFullUpdates++;
+
+                if (numFullUpdates % 10 === 0) {
+                    numFullUpdates = 0;
+                    update()
+                }
+                postMessages();
             }
         };
     });
